@@ -1,0 +1,1199 @@
+#+TITLE: Binaries
+#+AUTHOR: Yusef Aslam
+#+DESCRIPTION: Miscellaneous shell scripts.
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+PROPERTY: header-args :results output silent :mkdirp yes
+#+STARTUP: overview
+
+* Tangle this file
+#+begin_src emacs-lisp
+(org-babel-tangle)
+#+end_src
+
+
+* Display scripts
+Scripts that relaunch things. Usually used for when a display is connected/disconnected.
+** xlayout/post.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle xlayout/post.sh
+#!/bin/sh
+
+# pkill conky && conky -c ~/.config/conky/conky-moregap.conf && conky -c ~/.config/conky/conky-mpd.conf
+# nitrogen --restore
+
+# pkill stalonetray
+# /usr/bin/stalonetray
+pkill trayer
+trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --transparent false --height 17 --width 4 --alpha 0 --tint 0x000000 --transparent true &
+# dzen2script.sh
+# pkill dzen2
+#+end_src
+
+* Dmenu scripts
+Dmenu scripts.
+** dmenu-dark
+#+begin_src sh :tangle-mode (identity #o755)  :tangle dmenu-dark
+#!/bin/sh
+source ${XDG_CONFIG_HOME:-$HOME/.config}/solarized/colors.ini
+exec dmenu_run -nb $base03 -nf $base0 -sb $base02 -sf $orange -fn "DejaVu Sans Mono:size=16" "$@"
+#+end_src
+
+** dmenu-light
+#+begin_src sh :tangle-mode (identity #o755)  :tangle dmenu-light
+#!/bin/sh
+source ${XDG_CONFIG_HOME:-$HOME/.config}/solarized/colors.ini
+exec dmenu_run -nb $base3 -nf $base00 -sb $base2 -sf $orange -fn "DejaVu Sans Mono:size=16" "$@"
+#+end_src
+
+* Dotfile symlink scripts
+Scripts to easily symlink/unsymlink packages in my dotfiles
+** dotfl
+#+begin_src sh :tangle-mode (identity #o755)  :tangle dotfl
+#!/bin/bash
+
+ARG="$1"
+[[ -z $ARG ]] && echo "Needs argument!"
+[[ ! -z $ARG ]] && stow -S $ARG -t "$HOME" -v
+#+end_src
+
+** dotfu
+#+begin_src sh :tangle-mode (identity #o755)  :tangle dotfu
+#!/bin/bash
+
+ARG="$1"
+[[ -z $ARG ]] && echo "Needs argument!"
+[[ ! -z $ARG ]] && stow -D $ARG
+#+end_src
+
+* Dzen2 scripts
+Scripts that use dzen2 to show various things.
+** dzen2script-weather.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle dzen2script-weather.sh
+#!/bin/sh
+
+while true; do
+    if [ ! -f /tmp/weather ]; then
+        WEATHER="$(curl wttr.in/Turriff?0T | head -n8 > /tmp/weather)"
+    fi
+    if [ -f /tmp/weather ]; then
+        cat /tmp/weather && sleep 2
+        rm /tmp/weather
+        echo -e "\n\n\n\n\n\n\n" >> /tmp/weather
+    fi
+done| dzen2 -u -l 8 -ta left -y 20 -fn "DejaVu Sans Mono:size=18:style=Bold" -w 300
+#+end_src
+
+** dzen2script-volbar.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle dzen2script-volbar.sh
+#!/bin/sh
+
+while true; do
+   dbar-volume.sh
+done | dzen2 -w 330 -ta left
+#+end_src
+
+** dzen2script-msgs.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle dzen2script-msgs.sh
+#!/bin/sh
+
+while true; do
+    LOG="$(cat /var/log/messages | tail -n20 | sort -r)"
+    echo "${LOG}" | perl -ne 'print "^fg(black) $_"'
+    echo "^fg(lime)"
+    sleep 20
+done | dzen2 -u -ta left -bg aqua -x 580 -w 800 -l 20
+#+end_src
+
+** dzen2script.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle dzen2script.sh
+#!/bin/bash
+
+if [ ! -f "/tmp/dzen-is-lowered" ]; then
+    touch /tmp/dzen-is-lowered
+    DZENCMD="dzen2 -w 200 -e 'onstart=lower'"
+else
+    DZENCMD="dzen2 -w 200"
+    rm /tmp/dzen-is-lowered
+fi
+
+
+while true; do
+    STR_RIGHT="$(date)"
+    RIGHTOFFSET="200"
+    WINDOW=( $(xdpyinfo | awk -F ' |x' '/dimensions/ {print $7 " " $8}') )
+    XPOS=$((-${WINDOW[0]} + $RIGHTOFFSET))
+    echo "^p($XPOS)$STR_RIGHT"
+    sleep 1
+done | eval $DZENCMD
+#+end_src
+
+** dvol
+#+begin_src sh :tangle-mode (identity #o755)  :tangle dvol
+  #!/usr/bin/env bash
+
+  #Customize this stuff
+  IF="Master"
+  SECS="2"
+
+  BG="#000000"
+  FG="green"
+  WIDTH="250"
+  WIDTH_BAR=$(($WIDTH - 150))
+  WINDOW=( $(xdpyinfo | awk -F ' |x' '/dimensions/ {print $7 " " $8}') )
+  XPOS=$(((${WINDOW[0]} / 2) - ($WIDTH / 2)))
+  YPOS=$((${WINDOW[1]} / 2))
+
+  ICON_VOL=~/Git/sm4tik-xbm-icons/icons/spkr_01.xbm
+  ICON_VOL_MUTE=~/Git/sm4tik-xbm-icons/icons/spkr_02.xbm
+  ICON=$ICON_VOL
+
+  #Probably do not customize
+  PIPE="/tmp/dvolpipe"
+
+  err() {
+    echo "$1"
+    exit 1
+  }
+
+  usage() {
+    echo "usage: dvol [option] [argument] [interface]"
+    echo
+    echo "Options:"
+    echo "     -i, --increase - increase volume by \`argument'"
+    echo "     -d, --decrease - decrease volume by \`argument'"
+    echo "     -t, --toggle   - toggle mute on and off"
+    echo "     -h, --help     - display this"
+    echo
+    echo "The interface could be specified by the interface"
+    echo "parameter. If it is not specified, the IF var will be"
+    echo "used."
+    exit
+  }
+
+  #Argument Parsing
+  case "$1" in
+    '-i'|'--increase')
+      [ -z "$2" ] && err "No argument specified for increase."
+      [ -n "$(tr -d [0-9] <<<$2)" ] && err "The argument needs to be an integer."
+      AMIXARG="${2}%+"
+      ;;
+    '-d'|'--decrease')
+      [ -z "$2" ] && err "No argument specified for decrease."
+      [ -n "$(tr -d [0-9] <<<$2)" ] && err "The argument needs to be an integer."
+      AMIXARG="${2}%-"
+      ;;
+    '-t'|'--toggle')
+      AMIXARG="toggle"
+      ;;
+    ''|'-h'|'--help')
+      usage
+      ;;
+    ,*)
+      err "Unrecognized option \`$1', see dvol --help"
+      ;;
+  esac
+
+  # Optional interface parameter:
+  if [ $AMIXARG == "toggle" ]; then
+      IF=${2:-$IF}
+  else
+      IF=${3:-$IF}
+  fi
+
+
+  #Actual volume changing (readability low)
+  AMIXOUT="$(amixer set "$IF" "$AMIXARG" | tail -n 1)"
+  MUTE="$(cut -d '[' -f 3 <<<"$AMIXOUT")"
+  if [ "$MUTE" = "off]" ]; then
+    ICON=$ICON_VOL_MUTE
+  else
+    ICON=$ICON_VOL
+  fi
+
+  VOL="$(cut -d '[' -f 2 <<<"$AMIXOUT" | sed 's/%.*//g')"
+
+  #Using named pipe to determine whether previous call still exists
+  #Also prevents multiple volume bar instances
+  if [ ! -e "$PIPE" ]; then
+    mkfifo "$PIPE"
+    (dzen2 -tw $WIDTH -x "$XPOS" -y "$YPOS" -w "$WIDTH" -bg "$BG" -fg "$FG" < "$PIPE"; rm -f "$PIPE") &
+  fi
+
+  #Feed the pipe!
+  (echo "$VOL" | /usr/local/bin/dzen2-gdbar -l "$IF ^i(${ICON}) " -fg "$FG" -bg "$BG" -w $WIDTH_BAR ; sleep "$SECS") > "$PIPE"
+#+end_src
+
+** pulsevolbar.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle pulsevolbar.sh
+#!/bin/bash
+#
+# filename: pulsevolbar.sh
+# Usage:
+#      pulsevolbar.sh <increase/decrease/mute>
+#
+#
+#Customize this stuff
+SECS="1"            # sleep $SECS
+BG="#8E35EF"        # background colour of window
+FG="#FFFF00"        # foreground colour of text/icon
+BAR_FG="#F52887"    # foreground colour of volume bar
+BAR_BG="#41A317"    # background colour of volume bar
+HEIGHT="30"         # window height
+WIDTH="250"         # window width
+BAR_WIDTH="150"     # width of volume bar
+ICON=~/.pulse/dzen_icons/vol-hi.xbm
+FONT="-*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*"
+ICON_VOL=~/.icons/dzen_icons/vol-hi.xbm
+ICON_VOL_MUTE=~/.icons/dzen_icons/vol-mute.xbm
+ICON=$ICON_VOL
+PULSE_MAX_VOL=65536
+
+# No need to customize this variable
+PIPE="/tmp/pulesvolpipe"
+
+# Lets find the appropriate positioning for the volume bar
+XRES=`xdpyinfo|grep 'dimensions:'|awk '{print $2}'|cut -dx -f1`
+XPOS=$[$XRES / 2 - $WIDTH / 2]          # horizontal positioning
+YRES=`xdpyinfo|grep 'dimensions:'|awk '{print $2}'|cut -dx -f2`
+YPOS=$[$YRES * 4 / 5]          # vertical positioning
+
+# Sets the desired volume
+function set_volume()
+{
+	CURVOL=$1
+	pactl set-sink-volume 0 $CURVOL
+}
+
+# Gets the current volume
+function get_volume()
+{
+    MIXER=$(pacmd list-sinks 0 | grep -i "volume: 0:")
+    echo $MIXER | cut -d ' ' -f 3 | cut -d '%' -f 1
+}
+
+# Get muted ? returns yes or no
+function get_muted()
+{
+    MUTED=$(pacmd list-sinks 0 | grep muted | cut -d ' ' -f 2)
+    echo $MUTED
+}
+
+VOL=$(get_volume)
+CURVOL=$[$VOL * $PULSE_MAX_VOL / 100 ]
+MUTE=$(get_muted)         # Reads mute state
+if [[ $MUTE == "yes" ]]	# Sets the icon to mute_icon as the increase or decrease will not make speaker speak
+then
+    ICON=$ICON_VOL_MUTE
+fi
+
+if [[ $1 == "increase" ]]
+then
+    CURVOL=$(($CURVOL + 3277))	# 3277 is 5% of the total volume, you can change this to suit your needs.
+    if [[ $CURVOL -ge $PULSE_MAX_VOL ]]
+    then
+        CURVOL=$PULSE_MAX_VOL
+    fi
+    set_volume $CURVOL
+elif [[ $1 == "decrease" ]]
+then
+    CURVOL=$(($CURVOL - 3277))
+    if [[ $CURVOL -le 0 ]]
+    then
+        CURVOL=0
+    fi
+    set_volume $CURVOL
+elif [[ $1 == "mute" ]]
+then
+    if [[ $MUTE == "no" ]]
+    then
+        pactl set-sink-mute 0 1
+	ICON=$ICON_VOL_MUTE
+    else
+        pactl set-sink-mute 0 0
+	ICON=$ICON_VOL
+    fi
+fi
+
+# showing in dzen2
+if [ ! -e "$PIPE" ];
+# if pipe file does not exists
+then
+	mkfifo "$PIPE"
+	(dzen2 -tw "$WIDTH" -h "$HEIGHT" -x "$XPOS" -y "$YPOS" -fn "$FONT" -bg "$BG" -fg "$FG" < "$PIPE"
+	rm  -f "$PIPE") &
+fi
+# feed the pipe
+(echo $[$CURVOL *  100 / $PULSE_MAX_VOL]| gdbar -l "^i(${ICON})" -fg "$BAR_FG" -bg "$BAR_BG" -w "$BAR_WIDTH"  ; sleep "$SECS" ) > "$PIPE"
+#+end_src
+
+* Misc
+Miscellaneous scripts.
+** xftheight
+#+begin_src so-long :tangle xftheight
+ELF
+#+end_src
+
+** xftwidth
+#+begin_src so-long :tangle xftwidth
+ELF
+#+end_src
+
+** emacsmail
+#+begin_src sh :tangle-mode (identity #o755)  :tangle emacsmail
+emacsclient -create-frame -n --alternate-editor='emacs' --no-wait --eval \
+"(progn (x-focus-frame nil) (mu4e-compose-from-mailto \"$1\" t))"
+#+end_src
+
+** kill-aw.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle kill-aw.sh
+#!/bin/bash
+# Kill activitywatcher
+pkill aw-
+notify-send "ActivityWatch killed"
+#+end_src
+
+** unlock-gnome-keyring
+#+begin_src sh :tangle-mode (identity #o755)  :tangle unlock-gnome-keyring
+#!/bin/bash
+
+echo 'NOTE: This script will only work if launched via source or .' >&2
+echo -n 'Login password: ' >&2
+read -s _UNLOCK_PASSWORD || return
+killall -q -u "$(whoami)" gnome-keyring-daemon
+eval $(echo -n "${_UNLOCK_PASSWORD}" \
+           | gnome-keyring-daemon --daemonize --login \
+           | sed -e 's/^/export /')
+unset _UNLOCK_PASSWORD
+echo '' >&2
+#+end_src
+
+** osc52.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle osc52.sh
+#!/bin/sh
+# Copyright (c) 2012 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+# Max length of the OSC 52 sequence.  Sequences longer than this will not be
+# sent to the terminal.
+OSC_52_MAX_SEQUENCE="100000"
+# Write an error message and exit.
+# Usage: <message>
+die() {
+  echo "ERROR: $*"
+  exit 1
+}
+# Send a DCS sequence through tmux.
+# Usage: <sequence>
+tmux_dcs() {
+  printf '\033Ptmux;\033%s\033\\' "$1"
+}
+# Send a DCS sequence through screen.
+# Usage: <sequence>
+screen_dcs() {
+  # Screen limits the length of string sequences, so we have to break it up.
+  # Going by the screen history:
+  #   (v4.2.1) Apr 2014 - today: 768 bytes
+  #   Aug 2008 - Apr 2014 (v4.2.0): 512 bytes
+  #   ??? - Aug 2008 (v4.0.3): 256 bytes
+  # Since v4.2.0 is only ~4 years old, we'll use the 256 limit.
+  # We can probably switch to the 768 limit in 2022.
+  local limit=256
+  # We go 4 bytes under the limit because we're going to insert two bytes
+  # before (\eP) and 2 bytes after (\e\) each string.
+  echo "$1" | \
+    sed -E "s:.{$(( limit - 4 ))}:&\n:g" | \
+    sed -E -e 's:^:\x1bP:' -e 's:$:\x1b\\:' | \
+    tr -d '\n'
+}
+# Send an escape sequence to hterm.
+# Usage: <sequence>
+print_seq() {
+  local seq="$1"
+  case ${TERM-} in
+  screen*)
+    # Since tmux defaults to setting TERM=screen (ugh), we need to detect
+    # it here specially.
+    if [ -n "${TMUX-}" ]; then
+      tmux_dcs "${seq}"
+    else
+      screen_dcs "${seq}"
+    fi
+    ;;
+  tmux*)
+    tmux_dcs "${seq}"
+    ;;
+  ,*)
+    echo "${seq}"
+    ;;
+  esac
+}
+# Base64 encode stdin.
+b64enc() {
+  base64 | tr -d '\n'
+}
+# Send the OSC 52 sequence to copy the content.
+# Usage: [string]
+copy() {
+  local str
+  if [ $# -eq 0 ]; then
+    str="$(b64enc)"
+  else
+    str="$(echo "$@" | b64enc)"
+  fi
+  if [ ${OSC_52_MAX_SEQUENCE} -gt 0 ]; then
+    local len=${#str}
+    if [ ${len} -gt ${OSC_52_MAX_SEQUENCE} ]; then
+      die "selection too long to send to terminal:" \
+        "${OSC_52_MAX_SEQUENCE} limit, ${len} attempted"
+    fi
+  fi
+  print_seq "$(printf '\033]52;c;%s\a' "${str}")"
+}
+# Write tool usage and exit.
+# Usage: [error message]
+usage() {
+  if [ $# -gt 0 ]; then
+    exec 1>&2
+  fi
+  cat <<EOF
+Usage: osc52 [options] [string]
+Send an arbitrary string to the terminal clipboard using the OSC 52 escape
+sequence as specified in xterm:
+  https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+  Section "Operating System Controls", Ps => 52.
+The data can either be read from stdin:
+  $ echo "hello world" | osc52.sh
+Or specified on the command line:
+  $ osc52.sh "hello world"
+Options:
+  -h, --help    This screen.
+  -f, --force   Ignore max byte limit (${OSC_52_MAX_SEQUENCE})
+EOF
+  if [ $# -gt 0 ]; then
+    echo
+    die "$@"
+  else
+    exit 0
+  fi
+}
+main() {
+  set -e
+  while [ $# -gt 0 ]; do
+    case $1 in
+    -h|--help)
+      usage
+      ;;
+    -f|--force)
+      OSC_52_MAX_SEQUENCE=0
+      ;;
+    -*)
+      usage "Unknown option: $1"
+      ;;
+    ,*)
+      break
+      ;;
+    esac
+    shift
+  done
+  copy "$@"
+}
+main "$@"
+#+end_src
+
+** stumpish
+#+begin_src sh :tangle-mode (identity #o755)  :tangle stumpish
+#!/bin/sh
+
+# Copyright (C) 2007 Jonathan Moore Liles
+#
+# Maintainer: Jonathan Moore Liles
+#
+# stumpish is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# stumpish is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this software; see the file COPYING.  If not, see
+# <http://www.gnu.org/licenses/>.
+
+### STUMPwm Interactive SHell.
+
+DELAY=0.01
+
+if ! sleep $DELAY 2>/dev/null >&2
+then
+    DELAY=1
+fi
+
+# replace -E with -r option for old versions of GNU sed
+if ! sed -E 1p /dev/null 2>/dev/null; then
+    sed() { shift; command sed -r "$@"; }
+fi
+
+# parse C-style backslash sequences by default
+if [ "$(echo -e foo)" = foo ]; then
+    echo() { builtin echo -e "$@"; }
+fi
+
+wait_result ()
+{
+    while true
+    do
+	RESULT=$(xprop -root -f STUMPWM_COMMAND_RESULT 8s \
+	    STUMPWM_COMMAND_RESULT 2>/dev/null |
+	    sed -E 's/\\([[:digit:]]+)/\\0\1/g')
+	if echo "$RESULT" | grep -v -q 'not found.$'
+	then
+	    break
+	fi
+
+	sleep $DELAY
+    done
+
+    xprop -root -remove STUMPWM_COMMAND_RESULT
+
+    if echo "$RESULT" | grep -q '= $'
+    then
+	return 0
+    fi
+
+    echo "$RESULT" |
+    sed -E 's/[^"\\n]+"//
+            /^"[[:space:]]*$/d
+            s/(^|[^\\])\\n/\1\
+/g
+            s/\\(["\\n])/\1/g
+            s/\^([*[:digit:]]+|[Bbn])//g'
+}
+
+send_cmd ()
+{
+    local cmd="$1"
+
+    if [ "$cmd" = "stumpwm-quit" ]
+    then
+	cmd=quit
+    elif [ "$cmd" = "quit" ]
+    then
+	exit
+    fi
+
+    xprop -root -f STUMPWM_COMMAND 8s -set STUMPWM_COMMAND "$cmd"
+
+    wait_result
+}
+
+usage ()
+{
+    cat <<EOF
+Usage: ${0##*/} [[-e|-r] command [args...]]
+
+StumpIsh is the StumpWM shell. Use it to interact a running StumpWM
+instance.  When run from a terminal with no arguments, stumpish
+accepts commands interactively and prints each result.  If standard
+input is a pipe, stumpish executes any number of commands and prints
+the concatenated results. If the '-e' option and one argument are
+given on the command line, stumpish reads any number of lines from
+standard input and uses them as the argument to the named command.
+Otherwise, if one or more arguments are provided on the command line,
+the first is considered the name of the command to execute and the
+remainder is concatenated to form the argument.
+
+Example:
+	echo '(group-windows (current-group))' | ${0##*/} -e eval
+EOF
+    exit 0;
+}
+
+warn ()
+{
+  {
+    tput md bold
+    tput AF setaf 1
+    echo 'WARN:\c'
+    tput me sgr0
+    echo " $*"
+  } >&2
+}
+
+tput ()
+{
+    local cap1=$1 cap2=$2
+    shift 2
+
+    command tput $cap1 $@ 2>/dev/null ||
+    command tput $cap2 $@ 2>/dev/null
+}
+
+READLINE=yes
+
+if [ "x$1" = "x-r" ]
+then
+    READLINE=no
+    shift 1
+fi
+
+if [ $# -gt 0 ]
+then
+    [ "$1" = "--help" ] && usage
+    if [ "$1" = "-e" ]
+    then
+	if [ $# -ne 2 ]
+	then
+	    echo "'-e' requires exactly one argument!"
+	    exit
+	fi
+	shift 1
+	IFS=''
+	ARGS=$(cat /dev/stdin)
+	send_cmd "$1 $ARGS"
+    else
+	IFS=' '
+	send_cmd "$*"
+    fi
+else
+    if [ -t 0 ]
+    then
+	if ! type rlwrap 2>/dev/null >&2
+	then
+	    warn rlwrap not found, command completion won\'t work
+	elif [ $READLINE = yes ]
+	then
+	    COMMANDS="${TMPDIR:-/tmp}/stumpish.commands.$$"
+	    echo $(send_cmd "commands") |
+	    sed -E 's/[[:space:]]+/\
+/g' |
+	    sort > "$COMMANDS"
+	    trap 'rm -f "$COMMANDS"' exit int term
+	    rlwrap -b '' -f "$COMMANDS" "$0" -r
+	    exit
+	fi
+
+	tput AF setaf 5
+        echo Welcome to the STUMPwm Interactive SHell.
+        tput me sgr0
+        echo 'Type \c'
+        tput AF setaf 2
+        echo 'commands\c'
+        tput me sgr0
+        echo \ for a list of commands.
+
+	while read -p '> ' REPLY
+	do
+	    tput md bold
+	    tput AF setaf 2
+	    send_cmd "$REPLY"
+	    tput me sgr0
+	done
+    else
+	while read REPLY
+	do
+	    send_cmd "$REPLY"
+	done
+    fi
+fi
+#+end_src
+
+** pacsize
+#+begin_src python :tangle pacsize
+#!/usr/bin/env python
+import re
+import os
+
+class Package:
+    def __init__(self,name,size):
+        self.name = name
+        self.size = int(round(float(size)))
+    def __repr__(self):
+        return `self.size`+" "+self.name
+    def __cmp__(self,other):
+        return cmp(other.size,self.size) #desc
+
+paclist = []
+
+re_name = re.compile(r'Name\s*:\s*(\S+)')
+re_size = re.compile(r'Installed Size\s*:\s*([0-9.]+).*')
+
+p = os.popen("pacman -Qi","r")
+
+for line in p.readlines():
+    match_name = re_name.match(line)
+    match_size = re_size.match(line)
+    if match_name :
+            package_name = match_name.groups(1)[0]
+    if match_size :
+            package_size = match_size.groups(1)[0]
+            paclist.append(Package(package_name,package_size))
+
+p.close()
+
+paclist.sort()
+for pac in paclist: print pac
+#+end_src
+
+** pastebin
+#+begin_src sh :tangle-mode (identity #o755)  :tangle pastebin
+#!/bin/bash
+
+arg1="$1"
+cat $arg1 | curl -F 'f:1=<-' ix.io
+#+end_src
+
+** poll
+#+begin_src sh :tangle-mode (identity #o755)  :tangle poll
+#!/usr/bin/env bash
+
+__ScriptVersion="0.2"
+
+sha=0
+previous_sha=0
+timeout=1
+lazy=false
+all=false
+sha_cmd=shasum
+execute_on_startup=false
+
+#===  FUNCTION  ================================================================
+#         NAME:  execute_command
+#  DESCRIPTION:  Execute the command giveng in the command line argument.
+#===============================================================================
+function execute_command() {
+	clear
+	echo -en "executing \`${cmd}.\`\n"
+	echo -en "----------------------------------------------------------------"
+	echo -en "\n\n"
+	eval "${cmd}"
+	echo -en "\n\n"
+	echo -en "----------------------------------------------------------------"
+	echo -en "\ndone. Waiting for new changes on $path"
+}
+
+#===  FUNCTION  ================================================================
+#         NAME:  update_sha
+#  DESCRIPTION:  Updates the global sha varialbe by calculating the hash of the
+#                path using the specified sha_cmd.
+#===============================================================================
+function update_sha() {
+	if [[ $all == true ]]; then
+		sha=$(find "$path" -type f \
+			| sort -z | xargs $sha_cmd 2> /dev/null | $sha_cmd)
+	else
+		sha=$(find "$path" -type f -not -path '*/\.*' \
+			| sort -z | xargs $sha_cmd 2> /dev/null | $sha_cmd)
+	fi
+}
+
+#===  FUNCTION  ================================================================
+#         NAME:  usage
+#  DESCRIPTION:  Display usage information.
+#===============================================================================
+function usage () {
+				cat <<- EOT
+         ___   ____
+        /   / /   / /    /
+       /___/ /   / /    /
+      /     /   / /    /
+     /     /___/ /___ /___
+
+  Polls a file or directory content and executes a given command if a change
+  has occurred. Uses a hash of the content for comparison.
+
+  Usage :  $0 [options] /path/to/observe command_to_execute_on_change
+
+  Options:
+  -a|all        Include hidden files in obervation.
+	-e|startup    Execute command on startup
+  -h|help       Display this message.
+  -l|lazy       Don't react to changes that happen during execution of the
+                command. Usefull if	the command changes the oberved to path.
+  -s|sha        Set the command used to calculate hash. The default is shasum.
+  -t|timeout    Set the time to sleep between looking for changes.
+  -v|version    Display script version.
+
+  Example : $0 -l -s shasum5.18 -t 0.5 /tmp/ 'echo change detected at \`date\`'
+
+				EOT
+}
+
+#-------------------------------------------------------------------------------
+#  Handle command line arguments
+#-------------------------------------------------------------------------------
+while getopts "aet:ls:hv" opt
+do
+  case $opt in
+		a|all      )  all=true                                        ;;
+		e|startup  )  execute_on_startup=true                         ;;
+		h|help     )  usage; exit 0                                   ;;
+		l|lazy     )  lazy=true                                       ;;
+		s|sha      )  sha_cmd=$OPTARG;                                ;;
+		t|timeout  )  timeout=$OPTARG;                                ;;
+		v|version  )  echo "$0 -- Version $__ScriptVersion"; exit 0   ;;
+
+		\? )  echo -e "\n  Option does not exist : $OPTARG\n"
+				  usage; exit 1                                       ;;
+
+  esac    # --- end of case ---
+done
+shift $((OPTIND-1))
+
+#-------------------------------------------------------------------------------
+#  Main script
+#-------------------------------------------------------------------------------
+if [ $# -eq 0 ];
+then
+	usage
+    exit 0
+fi
+path=$1
+shift
+cmd=$*
+update_sha
+previous_sha=$sha
+echo -en "Observing $path and will execute \`$cmd\`"
+if [[ $execute_on_startup == true ]]; then
+	execute_command
+fi
+while true; do
+	if [[ "$sha" != "$previous_sha" ]]; then
+		execute_command
+		previous_sha=$sha
+		if [[ $lazy == true ]]; then
+			update_sha
+			previous_sha=$sha
+			continue
+		fi
+	fi
+	update_sha
+	sleep "$timeout"
+done
+#+end_src
+
+** set-theme
+#+begin_src sh :tangle-mode (identity #o755)  :tangle set-theme
+#!/bin/sh
+# Set theme for desktop using gsettings.
+# This file is autostarted from desktop file "$HOME/.config/autostart/set-theme.desktop".
+# I made this so that when using a Tiling WM etc.. the theme adjustments will be reset to ones for GNOME when launching GNOME.
+# This is why we also check $XDG_CURRENT_DESKTOP so if we use another DE, we don't change it's customized theme to something else.
+
+# Check if the current desktop is GNOME, if so, set correct theme.
+if [ "$XDG_CURRENT_DESKTOP" == "GNOME" ]; then
+    GNOME_SCHEMA="org.gnome.desktop.interface"
+    gsettings set $GNOME_SCHEMA gtk-theme "Adwaita"
+    gsettings set $GNOME_SCHEMA icon-theme "Adwaita"
+    gsettings set $GNOME_SCHEMA font-name "Cantarell 12"
+    gsettings set $GNOME_SCHEMA cursor-theme "Adwaita"
+fi
+
+# Check if the current desktop is Hyprland, if so, set correct theme.
+if [ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]; then
+    GNOME_SCHEMA="org.gnome.desktop.interface"
+    gsettings set $GNOME_SCHEMA gtk-theme "Greybird-dark"
+    gsettings set $GNOME_SCHEMA icon-theme "Adwaita"
+    gsettings set $GNOME_SCHEMA font-name "Fira Sans 12"
+    gsettings set $GNOME_SCHEMA cursor-theme "elementary"
+fi
+#+end_src
+
+** start-aw.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle start-aw.sh
+#!/bin/bash
+# Start activitywatcher
+
+cd ~/.local/opt/activitywatch
+
+pkill aw-
+
+yszKillAwServer=$(pgrep aw -a | grep "server" | awk '{print $1}')
+yszKillWindowWatcher=$(pgrep aw -a | grep "window" | awk '{print $1}')
+yszKillAfkWatcher=$(pgrep aw -a | grep "afk" | awk '{print $1}')
+
+aw-server &
+aw-watcher-utilization &
+
+if [[ "$XDG_CURRENT_DESKTOP" == "GNOME" ]]
+then
+    ${yszKillWindowWatcher}
+    ${yszKillAfkWatcher}
+    aw-watcher-gnome &
+    if [[ "$XDG_SESSION_TYPE" != "wayland" ]]
+    then
+        [[ $(pgrep aw-server) ]] && aw-watcher-afk &
+        [[ $(pgrep aw-server) ]] && aw-watcher-window &
+    fi
+fi
+
+if [[ "$XDG_SESSION_TYPE" == "wayland" && "$XDG_CURRENT_DESKTOP" != "GNOME" ]]
+then
+    ${yszKillWindowWatcher}
+    ${yszKillAfkWatcher}
+    aw-watcher-wayland &
+else
+    [[ $(pgrep aw-server) ]] && aw-watcher-afk &
+    [[ $(pgrep aw-server) ]] && aw-watcher-window &
+fi
+
+notify-send "ActivityWatch started"
+#+end_src
+
+** start-keychain
+#+begin_src sh :tangle-mode (identity #o755)  :tangle start-keychain
+#!/bin/sh
+
+eval $(keychain --eval --noask --quiet id_ed25519)
+#+end_src
+
+** rain-sounds.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle rain-sounds.sh
+#!/bin/bash
+
+chromium --new-window https://www.youtube.com/watch?v=SEkPsIXQEIU &
+
+
+qpwgraph -a $HOME/Documents/qpwgraph-patchbays/dual-output-rain-sounds.qpwgraph &
+pavucontrol &
+
+#+end_src
+
+** import-settings
+Set cursor theme e.g for use with Hyprland or any other window manager that runs on Wayland.
+#+begin_src sh :tangle-mode (identity #o755)  :tangle import-settings
+#!/bin/sh
+
+# usage: import-gsettings
+config="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
+if [ ! -f "$config" ]; then exit 1; fi
+
+gnome_schema="org.gnome.desktop.interface"
+gtk_theme="$(grep 'gtk-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+icon_theme="$(grep 'gtk-icon-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+cursor_theme="$(grep 'gtk-cursor-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+font_name="$(grep 'gtk-font-name' "$config" | sed 's/.*\s*=\s*//')"
+gsettings set "$gnome_schema" gtk-theme "$gtk_theme"
+gsettings set "$gnome_schema" icon-theme "$icon_theme"
+gsettings set "$gnome_schema" cursor-theme "$cursor_theme"
+gsettings set "$gnome_schema" font-name "$font_name"
+#+end_src
+* Music control scripts
+** mpc-control.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle mpc-control.sh
+#!/bin/sh
+#
+
+PAUSECMD=$(mpc | egrep '(paused|playing)' | awk '{print $1}' | sed 's/\[//g;s/\]//g')
+ARG="$1"
+
+case "$ARG" in
+    "PAUSE" )
+        echo "${PAUSECMD}" > /tmp/mpcpausedstate
+        if [[ "$(cat /tmp/mpcpausedstate)" == "paused" ]]; then
+            mpc play
+        fi
+        if [[ "$(cat /tmp/mpcpausedstate)" == "playing" ]]; then
+            mpc pause
+        fi
+        ;;
+    "STOP" )
+        mpc stop
+        ;;
+    "NEXT" )
+        mpc next
+        ;;
+    "PREVIOUS" )
+        mpc prev
+        ;;
+    "STATUS" )
+        mpc | head -n2 | tr '\n' ' '
+        ;;
+esac
+#+end_src
+
+* Status bar scripts
+** launch-bar.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle launch-bar.sh
+#!/bin/sh
+
+oxbar -F $HOME/.config/oxbar/oxbar.conf mytheme
+#+end_src
+
+** launchdzenbar.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle launchdzenbar.sh
+#!/bin/sh
+
+dzen2script.sh
+sleep 1
+dzen2script-msgs.sh
+sleep 1
+dzen2script-volbar.sh
+# sleep 1
+# dzen2script-weather.sh &
+#+end_src
+
+* Volume control scripts
+Scripts to control volume.
+** dbar-volume.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle dbar-volume.sh
+#!/bin/sh
+
+VOLUME="$(sndiovolv2.sh STATUS | xargs printf %.0f)"
+
+echo ${VOLUME} | dbar -max 100 -min 0 -s '#' -l 'Vol'
+#+end_src
+
+** sndiovol.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle sndiovol.sh
+#!/bin/sh
+
+VOLCMD=$(sndioctl | grep output.level | sed 's/output\.level\=//g')
+VOL=$(echo "${VOLCMD}*100" | bc)
+ADJ="$1"
+VOLADJ="$2"
+
+if [[ -z $VOLADJ ]]; then
+    UP=3
+    DOWN=3
+else
+    UP=$VOLADJ
+    DOWN=$VOLADJ
+fi
+
+VOLUP=$(echo "(${VOL}+$UP)/100" | bc -l)
+VOLDOWN=$(echo "(${VOL}-$DOWN)/100" | bc -l)
+
+if [[ "$ADJ" == "UP" ]]; then
+    sndioctl output.level=+${VOLUP}
+fi
+
+if [[ "$ADJ" == "DOWN" ]]; then
+    sndioctl output.level=-${VOLDOWN}
+fi
+
+if [[ "$ADJ" == "STATUS" ]]; then
+    echo "${VOL}"
+fi
+
+MUTESTATUS=$(echo "(${VOL}/100)>0" | bc -l)
+
+if [[ "$ADJ" == "TOGMUTE" ]]; then
+    if [[ ${MUTESTATUS} -eq 1 ]]; then
+        CURVOL=$(echo $(echo "${VOL}/100" | bc -l) > /tmp/curvol)
+        sndioctl output.level=0
+    fi
+    if [[ ${MUTESTATUS} -eq 0 ]]; then
+        CURVOL=$(cat /tmp/curvol)
+        sndioctl output.level=${CURVOL}
+    fi
+fi
+#+end_src
+
+** sndiovolv2.sh
+#+begin_src sh :tangle-mode (identity #o755)  :tangle sndiovolv2.sh
+#!/usr/local/bin/bash
+
+VOL_CMD=$(sndioctl output.level | cut -d'=' -f2)
+ARG[1]=$1
+if [ ! -z $2 ]; then
+    ARG[2]=$(bc -l <<< "$2/100" | xargs printf %.2f)
+fi
+
+case ${ARG[1]} in
+    "STATUS")
+        bc -l <<< "${VOL_CMD}*100";;
+    "UP")
+        sndioctl output.level=+${ARG[2]};;
+    "DOWN")
+        sndioctl output.level=-${ARG[2]};;
+    "TOGMUTE")
+        sndioctl output.mute=!
+        notify-send "Volume Muted";;
+esac
+#+end_src
+
+** sndiovolv2.sh.template
+#+begin_src sh :tangle-mode (identity #o755)  :tangle sndiovolv2.sh.template
+#!/usr/local/bin/bash
+
+VOL_CMD=$(sndioctl output.level | cut -d'=' -f2)
+ARG[1]=$1
+if [ ! -z $2 ]; then
+    ARG[2]=$(bc -l <<< "$2/100" | xargs printf %.2f)
+fi
+
+case ${ARG[1]} in
+    "UP")
+        sndioctl output.level=+${ARG[2]};;
+    "DOWN")
+        sndioctl output.level=-${ARG[2]};;
+    "TOGMUTE")
+        if [ -f "/tmp/prev_vol" ]; then
+            PREV_VOL=$(cat /tmp/prev_vol)
+        else
+            PREV_VOL=$(echo ${VOL_CMD} > /tmp/prev_vol)
+        fi
+        IS_MUTED=$(bc -l <<< "${PREV_VOL}>0")
+        if [ ! ${IS_MUTED} ]; then
+            sndioctl output.level=${PREV_VOL}
+        else
+            sndioctl output.level=0.000
+        fi
+esac
+#+end_src
+
+* Wayland scripts
+Scripts for Wayland.
+** wlprop
+#+begin_src sh :tangle-mode (identity #o755)  :tangle wlprop
+#!/usr/bin/env sh
+
+# wlprop
+#
+# Licensed under the MIT license
+# Copyright © 2022 bjosephmitchell@gmail.com
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the “Software”), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+# Dependencies:
+# - swaymsg
+# - jq
+# - slurp
+# - awk
+
+# Get the sway tree and store the output
+SWAY_TREE=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?)')
+
+# Invoke slurp to let the user select a window
+SELECTION=$(echo $SWAY_TREE | jq -r '.rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp)
+
+# Extract the X, Y, Width, and Height from the selection
+X=$(echo $SELECTION | awk -F'[, x]' '{print $1}')
+Y=$(echo $SELECTION | awk -F'[, x]' '{print $2}')
+W=$(echo $SELECTION | awk -F'[, x]' '{print $3}')
+H=$(echo $SELECTION | awk -F'[, x]' '{print $4}')
+
+# Find the window matching the selection
+echo $SWAY_TREE | jq -r --argjson x $X --argjson y $Y --argjson w $W --argjson h $H \
+  '. | select(.rect.x == $x and .rect.y == $y and .rect.width == $w and .rect.height == $h)'
+#+end_src
+
+* Startup scripts
+Scripts for starting stuff up.

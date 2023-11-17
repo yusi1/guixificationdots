@@ -1,0 +1,23 @@
+#!/bin/sh
+# Set theme for desktop using gsettings.
+# This file is autostarted from desktop file "$HOME/.config/autostart/set-theme.desktop".
+# I made this so that when using a Tiling WM etc.. the theme adjustments will be reset to ones for GNOME when launching GNOME.
+# This is why we also check $XDG_CURRENT_DESKTOP so if we use another DE, we don't change it's customized theme to something else.
+
+# Check if the current desktop is GNOME, if so, set correct theme.
+if [ "$XDG_CURRENT_DESKTOP" == "GNOME" ]; then
+    GNOME_SCHEMA="org.gnome.desktop.interface"
+    gsettings set $GNOME_SCHEMA gtk-theme "Adwaita"
+    gsettings set $GNOME_SCHEMA icon-theme "Adwaita"
+    gsettings set $GNOME_SCHEMA font-name "Cantarell 12"
+    gsettings set $GNOME_SCHEMA cursor-theme "Adwaita"
+fi
+
+# Check if the current desktop is Hyprland, if so, set correct theme.
+if [ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]; then
+    GNOME_SCHEMA="org.gnome.desktop.interface"
+    gsettings set $GNOME_SCHEMA gtk-theme "Greybird-dark"
+    gsettings set $GNOME_SCHEMA icon-theme "Adwaita"
+    gsettings set $GNOME_SCHEMA font-name "Fira Sans 12"
+    gsettings set $GNOME_SCHEMA cursor-theme "elementary"
+fi

@@ -1,0 +1,1535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2023-10-14 Sat 18:07 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Binaries</title>
+<meta name="author" content="Yusef Aslam" />
+<meta name="description" content="Miscellaneous shell scripts." />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Binaries</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgc9fce85">1. Tangle this file</a></li>
+<li><a href="#orgc715d47">2. Display scripts</a>
+<ul>
+<li><a href="#orgad72be3">2.1. xlayout/post.sh</a></li>
+</ul>
+</li>
+<li><a href="#org65aa1c2">3. Dmenu scripts</a>
+<ul>
+<li><a href="#org5a784dd">3.1. dmenu-dark</a></li>
+<li><a href="#org98294c2">3.2. dmenu-light</a></li>
+</ul>
+</li>
+<li><a href="#orgdbc6069">4. Dotfile symlink scripts</a>
+<ul>
+<li><a href="#orge909a42">4.1. dotfl</a></li>
+<li><a href="#orga741adf">4.2. dotfu</a></li>
+</ul>
+</li>
+<li><a href="#orgc33066a">5. Dzen2 scripts</a>
+<ul>
+<li><a href="#org7ab858b">5.1. dzen2script-weather.sh</a></li>
+<li><a href="#orge2a39c0">5.2. dzen2script-volbar.sh</a></li>
+<li><a href="#org3a75959">5.3. dzen2script-msgs.sh</a></li>
+<li><a href="#org2938dc1">5.4. dzen2script.sh</a></li>
+<li><a href="#org53efc08">5.5. dvol</a></li>
+<li><a href="#org57088e9">5.6. pulsevolbar.sh</a></li>
+</ul>
+</li>
+<li><a href="#org228d452">6. Misc</a>
+<ul>
+<li><a href="#orgeb8ca25">6.1. xftheight</a></li>
+<li><a href="#org8f99059">6.2. xftwidth</a></li>
+<li><a href="#orgef1a844">6.3. emacsmail</a></li>
+<li><a href="#org57c311e">6.4. kill-aw.sh</a></li>
+<li><a href="#orgb257e82">6.5. unlock-gnome-keyring</a></li>
+<li><a href="#orgee1952d">6.6. osc52.sh</a></li>
+<li><a href="#orgf4e5dad">6.7. stumpish</a></li>
+<li><a href="#org267196a">6.8. pacsize</a></li>
+<li><a href="#org850a055">6.9. pastebin</a></li>
+<li><a href="#org72321fc">6.10. poll</a></li>
+<li><a href="#org04c2e7f">6.11. set-theme</a></li>
+<li><a href="#org7a370e7">6.12. start-aw.sh</a></li>
+<li><a href="#orgc019f07">6.13. start-keychain</a></li>
+<li><a href="#org5b43d00">6.14. rain-sounds.sh</a></li>
+<li><a href="#org5510518">6.15. import-settings</a></li>
+</ul>
+</li>
+<li><a href="#org6b3ac73">7. Music control scripts</a>
+<ul>
+<li><a href="#orgc295936">7.1. mpc-control.sh</a></li>
+</ul>
+</li>
+<li><a href="#org387a3e3">8. Status bar scripts</a>
+<ul>
+<li><a href="#org427b8bc">8.1. launch-bar.sh</a></li>
+<li><a href="#org00e5558">8.2. launchdzenbar.sh</a></li>
+</ul>
+</li>
+<li><a href="#orgdc4518a">9. Volume control scripts</a>
+<ul>
+<li><a href="#orgd7c532e">9.1. dbar-volume.sh</a></li>
+<li><a href="#org48f5add">9.2. sndiovol.sh</a></li>
+<li><a href="#org6e7b81c">9.3. sndiovolv2.sh</a></li>
+<li><a href="#orgbba8126">9.4. sndiovolv2.sh.template</a></li>
+</ul>
+</li>
+<li><a href="#orgbb1c293">10. Wayland scripts</a>
+<ul>
+<li><a href="#orge8602bf">10.1. wlprop</a></li>
+</ul>
+</li>
+<li><a href="#org725a35a">11. Startup scripts</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgc9fce85" class="outline-2">
+<h2 id="orgc9fce85"><span class="section-number-2">1.</span> Tangle this file</h2>
+<div class="outline-text-2" id="text-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">(org-babel-tangle)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgc715d47" class="outline-2">
+<h2 id="orgc715d47"><span class="section-number-2">2.</span> Display scripts</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Scripts that relaunch things. Usually used for when a display is connected/disconnected.
+</p>
+</div>
+<div id="outline-container-orgad72be3" class="outline-3">
+<h3 id="orgad72be3"><span class="section-number-3">2.1.</span> xlayout/post.sh</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+
+# pkill conky &amp;&amp; conky -c ~/.config/conky/conky-moregap.conf &amp;&amp; conky -c ~/.config/conky/conky-mpd.conf
+# nitrogen --restore
+
+# pkill stalonetray
+# /usr/bin/stalonetray
+pkill trayer
+trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --transparent false --height 17 --width 4 --alpha 0 --tint 0x000000 --transparent true &amp;
+# dzen2script.sh
+# pkill dzen2
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org65aa1c2" class="outline-2">
+<h2 id="org65aa1c2"><span class="section-number-2">3.</span> Dmenu scripts</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Dmenu scripts.
+</p>
+</div>
+<div id="outline-container-org5a784dd" class="outline-3">
+<h3 id="org5a784dd"><span class="section-number-3">3.1.</span> dmenu-dark</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+source ${XDG_CONFIG_HOME:-$HOME/.config}/solarized/colors.ini
+exec dmenu_run -nb $base03 -nf $base0 -sb $base02 -sf $orange -fn "DejaVu Sans Mono:size=16" "$@"
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org98294c2" class="outline-3">
+<h3 id="org98294c2"><span class="section-number-3">3.2.</span> dmenu-light</h3>
+<div class="outline-text-3" id="text-3-2">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+source ${XDG_CONFIG_HOME:-$HOME/.config}/solarized/colors.ini
+exec dmenu_run -nb $base3 -nf $base00 -sb $base2 -sf $orange -fn "DejaVu Sans Mono:size=16" "$@"
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdbc6069" class="outline-2">
+<h2 id="orgdbc6069"><span class="section-number-2">4.</span> Dotfile symlink scripts</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Scripts to easily symlink/unsymlink packages in my dotfiles
+</p>
+</div>
+<div id="outline-container-orge909a42" class="outline-3">
+<h3 id="orge909a42"><span class="section-number-3">4.1.</span> dotfl</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/bash
+
+ARG="$1"
+[[ -z $ARG ]] &amp;&amp; echo "Needs argument!"
+[[ ! -z $ARG ]] &amp;&amp; stow -S $ARG -t "$HOME" -v
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga741adf" class="outline-3">
+<h3 id="orga741adf"><span class="section-number-3">4.2.</span> dotfu</h3>
+<div class="outline-text-3" id="text-4-2">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/bash
+
+ARG="$1"
+[[ -z $ARG ]] &amp;&amp; echo "Needs argument!"
+[[ ! -z $ARG ]] &amp;&amp; stow -D $ARG
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc33066a" class="outline-2">
+<h2 id="orgc33066a"><span class="section-number-2">5.</span> Dzen2 scripts</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Scripts that use dzen2 to show various things.
+</p>
+</div>
+<div id="outline-container-org7ab858b" class="outline-3">
+<h3 id="org7ab858b"><span class="section-number-3">5.1.</span> dzen2script-weather.sh</h3>
+<div class="outline-text-3" id="text-5-1">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+
+while true; do
+    if [ ! -f /tmp/weather ]; then
+	WEATHER="$(curl wttr.in/Turriff?0T | head -n8 &gt; /tmp/weather)"
+    fi
+    if [ -f /tmp/weather ]; then
+	cat /tmp/weather &amp;&amp; sleep 2
+	rm /tmp/weather
+	echo -e "\n\n\n\n\n\n\n" &gt;&gt; /tmp/weather
+    fi
+done| dzen2 -u -l 8 -ta left -y 20 -fn "DejaVu Sans Mono:size=18:style=Bold" -w 300
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge2a39c0" class="outline-3">
+<h3 id="orge2a39c0"><span class="section-number-3">5.2.</span> dzen2script-volbar.sh</h3>
+<div class="outline-text-3" id="text-5-2">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+
+while true; do
+   dbar-volume.sh
+done | dzen2 -w 330 -ta left
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3a75959" class="outline-3">
+<h3 id="org3a75959"><span class="section-number-3">5.3.</span> dzen2script-msgs.sh</h3>
+<div class="outline-text-3" id="text-5-3">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+
+while true; do
+    LOG="$(cat /var/log/messages | tail -n20 | sort -r)"
+    echo "${LOG}" | perl -ne 'print "^fg(black) $_"'
+    echo "^fg(lime)"
+    sleep 20
+done | dzen2 -u -ta left -bg aqua -x 580 -w 800 -l 20
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2938dc1" class="outline-3">
+<h3 id="org2938dc1"><span class="section-number-3">5.4.</span> dzen2script.sh</h3>
+<div class="outline-text-3" id="text-5-4">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/bash
+
+if [ ! -f "/tmp/dzen-is-lowered" ]; then
+    touch /tmp/dzen-is-lowered
+    DZENCMD="dzen2 -w 200 -e 'onstart=lower'"
+else
+    DZENCMD="dzen2 -w 200"
+    rm /tmp/dzen-is-lowered
+fi
+
+
+while true; do
+    STR_RIGHT="$(date)"
+    RIGHTOFFSET="200"
+    WINDOW=( $(xdpyinfo | awk -F ' |x' '/dimensions/ {print $7 " " $8}') )
+    XPOS=$((-${WINDOW[0]} + $RIGHTOFFSET))
+    echo "^p($XPOS)$STR_RIGHT"
+    sleep 1
+done | eval $DZENCMD
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org53efc08" class="outline-3">
+<h3 id="org53efc08"><span class="section-number-3">5.5.</span> dvol</h3>
+<div class="outline-text-3" id="text-5-5">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/bash
+
+#Customize this stuff
+IF="Master"
+SECS="2"
+
+BG="#000000"
+FG="green"
+WIDTH="250"
+WIDTH_BAR=$(($WIDTH - 150))
+WINDOW=( $(xdpyinfo | awk -F ' |x' '/dimensions/ {print $7 " " $8}') )
+XPOS=$(((${WINDOW[0]} / 2) - ($WIDTH / 2)))
+YPOS=$((${WINDOW[1]} / 2))
+
+ICON_VOL=~/Git/sm4tik-xbm-icons/icons/spkr_01.xbm
+ICON_VOL_MUTE=~/Git/sm4tik-xbm-icons/icons/spkr_02.xbm
+ICON=$ICON_VOL
+
+#Probably do not customize
+PIPE="/tmp/dvolpipe"
+
+err() {
+  echo "$1"
+  exit 1
+}
+
+usage() {
+  echo "usage: dvol [option] [argument] [interface]"
+  echo
+  echo "Options:"
+  echo "     -i, --increase - increase volume by \`argument'"
+  echo "     -d, --decrease - decrease volume by \`argument'"
+  echo "     -t, --toggle   - toggle mute on and off"
+  echo "     -h, --help     - display this"
+  echo
+  echo "The interface could be specified by the interface"
+  echo "parameter. If it is not specified, the IF var will be"
+  echo "used."
+  exit
+}
+
+#Argument Parsing
+case "$1" in
+  '-i'|'--increase')
+    [ -z "$2" ] &amp;&amp; err "No argument specified for increase."
+    [ -n "$(tr -d [0-9] &lt;&lt;&lt;$2)" ] &amp;&amp; err "The argument needs to be an integer."
+    AMIXARG="${2}%+"
+    ;;
+  '-d'|'--decrease')
+    [ -z "$2" ] &amp;&amp; err "No argument specified for decrease."
+    [ -n "$(tr -d [0-9] &lt;&lt;&lt;$2)" ] &amp;&amp; err "The argument needs to be an integer."
+    AMIXARG="${2}%-"
+    ;;
+  '-t'|'--toggle')
+    AMIXARG="toggle"
+    ;;
+  ''|'-h'|'--help')
+    usage
+    ;;
+  *)
+    err "Unrecognized option \`$1', see dvol --help"
+    ;;
+esac
+
+# Optional interface parameter:
+if [ $AMIXARG == "toggle" ]; then
+    IF=${2:-$IF}
+else
+    IF=${3:-$IF}
+fi
+
+
+#Actual volume changing (readability low)
+AMIXOUT="$(amixer set "$IF" "$AMIXARG" | tail -n 1)"
+MUTE="$(cut -d '[' -f 3 &lt;&lt;&lt;"$AMIXOUT")"
+if [ "$MUTE" = "off]" ]; then
+  ICON=$ICON_VOL_MUTE
+else
+  ICON=$ICON_VOL
+fi
+
+VOL="$(cut -d '[' -f 2 &lt;&lt;&lt;"$AMIXOUT" | sed 's/%.*//g')"
+
+#Using named pipe to determine whether previous call still exists
+#Also prevents multiple volume bar instances
+if [ ! -e "$PIPE" ]; then
+  mkfifo "$PIPE"
+  (dzen2 -tw $WIDTH -x "$XPOS" -y "$YPOS" -w "$WIDTH" -bg "$BG" -fg "$FG" &lt; "$PIPE"; rm -f "$PIPE") &amp;
+fi
+
+#Feed the pipe!
+(echo "$VOL" | gdbar -l "$IF ^i(${ICON}) " -fg "$FG" -bg "$BG" -w $WIDTH_BAR ; sleep "$SECS") &gt; "$PIPE"
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org57088e9" class="outline-3">
+<h3 id="org57088e9"><span class="section-number-3">5.6.</span> pulsevolbar.sh</h3>
+<div class="outline-text-3" id="text-5-6">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/bash
+#
+# filename: pulsevolbar.sh
+# Usage:
+#      pulsevolbar.sh &lt;increase/decrease/mute&gt;
+#
+#
+#Customize this stuff
+SECS="1"            # sleep $SECS
+BG="#8E35EF"        # background colour of window
+FG="#FFFF00"        # foreground colour of text/icon
+BAR_FG="#F52887"    # foreground colour of volume bar
+BAR_BG="#41A317"    # background colour of volume bar
+HEIGHT="30"         # window height
+WIDTH="250"         # window width
+BAR_WIDTH="150"     # width of volume bar
+ICON=~/.pulse/dzen_icons/vol-hi.xbm
+FONT="-*-terminus-medium-r-*-*-14-*-*-*-*-*-*-*"
+ICON_VOL=~/.icons/dzen_icons/vol-hi.xbm
+ICON_VOL_MUTE=~/.icons/dzen_icons/vol-mute.xbm
+ICON=$ICON_VOL
+PULSE_MAX_VOL=65536
+
+# No need to customize this variable
+PIPE="/tmp/pulesvolpipe"
+
+# Lets find the appropriate positioning for the volume bar
+XRES=`xdpyinfo|grep 'dimensions:'|awk '{print $2}'|cut -dx -f1`
+XPOS=$[$XRES / 2 - $WIDTH / 2]          # horizontal positioning
+YRES=`xdpyinfo|grep 'dimensions:'|awk '{print $2}'|cut -dx -f2`
+YPOS=$[$YRES * 4 / 5]          # vertical positioning
+
+# Sets the desired volume
+function set_volume()
+{
+	CURVOL=$1
+	pactl set-sink-volume 0 $CURVOL
+}
+
+# Gets the current volume
+function get_volume()
+{
+    MIXER=$(pacmd list-sinks 0 | grep -i "volume: 0:")
+    echo $MIXER | cut -d ' ' -f 3 | cut -d '%' -f 1
+}
+
+# Get muted ? returns yes or no
+function get_muted()
+{
+    MUTED=$(pacmd list-sinks 0 | grep muted | cut -d ' ' -f 2)
+    echo $MUTED
+}
+
+VOL=$(get_volume)
+CURVOL=$[$VOL * $PULSE_MAX_VOL / 100 ]
+MUTE=$(get_muted)         # Reads mute state
+if [[ $MUTE == "yes" ]]	# Sets the icon to mute_icon as the increase or decrease will not make speaker speak
+then
+    ICON=$ICON_VOL_MUTE
+fi
+
+if [[ $1 == "increase" ]]
+then
+    CURVOL=$(($CURVOL + 3277))	# 3277 is 5% of the total volume, you can change this to suit your needs.
+    if [[ $CURVOL -ge $PULSE_MAX_VOL ]]
+    then
+	CURVOL=$PULSE_MAX_VOL
+    fi
+    set_volume $CURVOL
+elif [[ $1 == "decrease" ]]
+then
+    CURVOL=$(($CURVOL - 3277))
+    if [[ $CURVOL -le 0 ]]
+    then
+	CURVOL=0
+    fi
+    set_volume $CURVOL
+elif [[ $1 == "mute" ]]
+then
+    if [[ $MUTE == "no" ]]
+    then
+	pactl set-sink-mute 0 1
+	ICON=$ICON_VOL_MUTE
+    else
+	pactl set-sink-mute 0 0
+	ICON=$ICON_VOL
+    fi
+fi
+
+# showing in dzen2
+if [ ! -e "$PIPE" ];
+# if pipe file does not exists
+then
+	mkfifo "$PIPE"
+	(dzen2 -tw "$WIDTH" -h "$HEIGHT" -x "$XPOS" -y "$YPOS" -fn "$FONT" -bg "$BG" -fg "$FG" &lt; "$PIPE"
+	rm  -f "$PIPE") &amp;
+fi
+# feed the pipe
+(echo $[$CURVOL *  100 / $PULSE_MAX_VOL]| gdbar -l "^i(${ICON})" -fg "$BAR_FG" -bg "$BAR_BG" -w "$BAR_WIDTH"  ; sleep "$SECS" ) &gt; "$PIPE"
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org228d452" class="outline-2">
+<h2 id="org228d452"><span class="section-number-2">6.</span> Misc</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+Miscellaneous scripts.
+</p>
+</div>
+<div id="outline-container-orgeb8ca25" class="outline-3">
+<h3 id="orgeb8ca25"><span class="section-number-3">6.1.</span> xftheight</h3>
+<div class="outline-text-3" id="text-6-1">
+<div class="org-src-container">
+<pre class="src src-so-long">ELF
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8f99059" class="outline-3">
+<h3 id="org8f99059"><span class="section-number-3">6.2.</span> xftwidth</h3>
+<div class="outline-text-3" id="text-6-2">
+<div class="org-src-container">
+<pre class="src src-so-long">ELF
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgef1a844" class="outline-3">
+<h3 id="orgef1a844"><span class="section-number-3">6.3.</span> emacsmail</h3>
+<div class="outline-text-3" id="text-6-3">
+<div class="org-src-container">
+<pre class="src src-sh">emacsclient -create-frame -n --alternate-editor='emacs' --no-wait --eval \
+"(progn (x-focus-frame nil) (mu4e-compose-from-mailto \"$1\" t))"
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org57c311e" class="outline-3">
+<h3 id="org57c311e"><span class="section-number-3">6.4.</span> kill-aw.sh</h3>
+<div class="outline-text-3" id="text-6-4">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/bash
+# Kill activitywatcher
+pkill aw-
+notify-send "ActivityWatch killed"
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb257e82" class="outline-3">
+<h3 id="orgb257e82"><span class="section-number-3">6.5.</span> unlock-gnome-keyring</h3>
+<div class="outline-text-3" id="text-6-5">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/bash
+
+echo 'NOTE: This script will only work if launched via source or .' &gt;&amp;2
+echo -n 'Login password: ' &gt;&amp;2
+read -s _UNLOCK_PASSWORD || return
+killall -q -u "$(whoami)" gnome-keyring-daemon
+eval $(echo -n "${_UNLOCK_PASSWORD}" \
+	   | gnome-keyring-daemon --daemonize --login \
+	   | sed -e 's/^/export /')
+unset _UNLOCK_PASSWORD
+echo '' &gt;&amp;2
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgee1952d" class="outline-3">
+<h3 id="orgee1952d"><span class="section-number-3">6.6.</span> osc52.sh</h3>
+<div class="outline-text-3" id="text-6-6">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+# Copyright (c) 2012 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+# Max length of the OSC 52 sequence.  Sequences longer than this will not be
+# sent to the terminal.
+OSC_52_MAX_SEQUENCE="100000"
+# Write an error message and exit.
+# Usage: &lt;message&gt;
+die() {
+  echo "ERROR: $*"
+  exit 1
+}
+# Send a DCS sequence through tmux.
+# Usage: &lt;sequence&gt;
+tmux_dcs() {
+  printf '\033Ptmux;\033%s\033\\' "$1"
+}
+# Send a DCS sequence through screen.
+# Usage: &lt;sequence&gt;
+screen_dcs() {
+  # Screen limits the length of string sequences, so we have to break it up.
+  # Going by the screen history:
+  #   (v4.2.1) Apr 2014 - today: 768 bytes
+  #   Aug 2008 - Apr 2014 (v4.2.0): 512 bytes
+  #   ??? - Aug 2008 (v4.0.3): 256 bytes
+  # Since v4.2.0 is only ~4 years old, we'll use the 256 limit.
+  # We can probably switch to the 768 limit in 2022.
+  local limit=256
+  # We go 4 bytes under the limit because we're going to insert two bytes
+  # before (\eP) and 2 bytes after (\e\) each string.
+  echo "$1" | \
+    sed -E "s:.{$(( limit - 4 ))}:&amp;\n:g" | \
+    sed -E -e 's:^:\x1bP:' -e 's:$:\x1b\\:' | \
+    tr -d '\n'
+}
+# Send an escape sequence to hterm.
+# Usage: &lt;sequence&gt;
+print_seq() {
+  local seq="$1"
+  case ${TERM-} in
+  screen*)
+    # Since tmux defaults to setting TERM=screen (ugh), we need to detect
+    # it here specially.
+    if [ -n "${TMUX-}" ]; then
+      tmux_dcs "${seq}"
+    else
+      screen_dcs "${seq}"
+    fi
+    ;;
+  tmux*)
+    tmux_dcs "${seq}"
+    ;;
+  *)
+    echo "${seq}"
+    ;;
+  esac
+}
+# Base64 encode stdin.
+b64enc() {
+  base64 | tr -d '\n'
+}
+# Send the OSC 52 sequence to copy the content.
+# Usage: [string]
+copy() {
+  local str
+  if [ $# -eq 0 ]; then
+    str="$(b64enc)"
+  else
+    str="$(echo "$@" | b64enc)"
+  fi
+  if [ ${OSC_52_MAX_SEQUENCE} -gt 0 ]; then
+    local len=${#str}
+    if [ ${len} -gt ${OSC_52_MAX_SEQUENCE} ]; then
+      die "selection too long to send to terminal:" \
+	"${OSC_52_MAX_SEQUENCE} limit, ${len} attempted"
+    fi
+  fi
+  print_seq "$(printf '\033]52;c;%s\a' "${str}")"
+}
+# Write tool usage and exit.
+# Usage: [error message]
+usage() {
+  if [ $# -gt 0 ]; then
+    exec 1&gt;&amp;2
+  fi
+  cat &lt;&lt;EOF
+Usage: osc52 [options] [string]
+Send an arbitrary string to the terminal clipboard using the OSC 52 escape
+sequence as specified in xterm:
+  https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+  Section "Operating System Controls", Ps =&gt; 52.
+The data can either be read from stdin:
+  $ echo "hello world" | osc52.sh
+Or specified on the command line:
+  $ osc52.sh "hello world"
+Options:
+  -h, --help    This screen.
+  -f, --force   Ignore max byte limit (${OSC_52_MAX_SEQUENCE})
+EOF
+  if [ $# -gt 0 ]; then
+    echo
+    die "$@"
+  else
+    exit 0
+  fi
+}
+main() {
+  set -e
+  while [ $# -gt 0 ]; do
+    case $1 in
+    -h|--help)
+      usage
+      ;;
+    -f|--force)
+      OSC_52_MAX_SEQUENCE=0
+      ;;
+    -*)
+      usage "Unknown option: $1"
+      ;;
+    *)
+      break
+      ;;
+    esac
+    shift
+  done
+  copy "$@"
+}
+main "$@"
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf4e5dad" class="outline-3">
+<h3 id="orgf4e5dad"><span class="section-number-3">6.7.</span> stumpish</h3>
+<div class="outline-text-3" id="text-6-7">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+
+# Copyright (C) 2007 Jonathan Moore Liles
+#
+# Maintainer: Jonathan Moore Liles
+#
+# stumpish is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# stumpish is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this software; see the file COPYING.  If not, see
+# &lt;http://www.gnu.org/licenses/&gt;.
+
+### STUMPwm Interactive SHell.
+
+DELAY=0.01
+
+if ! sleep $DELAY 2&gt;/dev/null &gt;&amp;2
+then
+    DELAY=1
+fi
+
+# replace -E with -r option for old versions of GNU sed
+if ! sed -E 1p /dev/null 2&gt;/dev/null; then
+    sed() { shift; command sed -r "$@"; }
+fi
+
+# parse C-style backslash sequences by default
+if [ "$(echo -e foo)" = foo ]; then
+    echo() { builtin echo -e "$@"; }
+fi
+
+wait_result ()
+{
+    while true
+    do
+	RESULT=$(xprop -root -f STUMPWM_COMMAND_RESULT 8s \
+	    STUMPWM_COMMAND_RESULT 2&gt;/dev/null |
+	    sed -E 's/\\([[:digit:]]+)/\\0\1/g')
+	if echo "$RESULT" | grep -v -q 'not found.$'
+	then
+	    break
+	fi
+
+	sleep $DELAY
+    done
+
+    xprop -root -remove STUMPWM_COMMAND_RESULT
+
+    if echo "$RESULT" | grep -q '= $'
+    then
+	return 0
+    fi
+
+    echo "$RESULT" |
+    sed -E 's/[^"\\n]+"//
+	    /^"[[:space:]]*$/d
+	    s/(^|[^\\])\\n/\1\
+/g
+	    s/\\(["\\n])/\1/g
+	    s/\^([*[:digit:]]+|[Bbn])//g'
+}
+
+send_cmd ()
+{
+    local cmd="$1"
+
+    if [ "$cmd" = "stumpwm-quit" ]
+    then
+	cmd=quit
+    elif [ "$cmd" = "quit" ]
+    then
+	exit
+    fi
+
+    xprop -root -f STUMPWM_COMMAND 8s -set STUMPWM_COMMAND "$cmd"
+
+    wait_result
+}
+
+usage ()
+{
+    cat &lt;&lt;EOF
+Usage: ${0##*/} [[-e|-r] command [args...]]
+
+StumpIsh is the StumpWM shell. Use it to interact a running StumpWM
+instance.  When run from a terminal with no arguments, stumpish
+accepts commands interactively and prints each result.  If standard
+input is a pipe, stumpish executes any number of commands and prints
+the concatenated results. If the '-e' option and one argument are
+given on the command line, stumpish reads any number of lines from
+standard input and uses them as the argument to the named command.
+Otherwise, if one or more arguments are provided on the command line,
+the first is considered the name of the command to execute and the
+remainder is concatenated to form the argument.
+
+Example:
+	echo '(group-windows (current-group))' | ${0##*/} -e eval
+EOF
+    exit 0;
+}
+
+warn ()
+{
+  {
+    tput md bold
+    tput AF setaf 1
+    echo 'WARN:\c'
+    tput me sgr0
+    echo " $*"
+  } &gt;&amp;2
+}
+
+tput ()
+{
+    local cap1=$1 cap2=$2
+    shift 2
+
+    command tput $cap1 $@ 2&gt;/dev/null ||
+    command tput $cap2 $@ 2&gt;/dev/null
+}
+
+READLINE=yes
+
+if [ "x$1" = "x-r" ]
+then
+    READLINE=no
+    shift 1
+fi
+
+if [ $# -gt 0 ]
+then
+    [ "$1" = "--help" ] &amp;&amp; usage
+    if [ "$1" = "-e" ]
+    then
+	if [ $# -ne 2 ]
+	then
+	    echo "'-e' requires exactly one argument!"
+	    exit
+	fi
+	shift 1
+	IFS=''
+	ARGS=$(cat /dev/stdin)
+	send_cmd "$1 $ARGS"
+    else
+	IFS=' '
+	send_cmd "$*"
+    fi
+else
+    if [ -t 0 ]
+    then
+	if ! type rlwrap 2&gt;/dev/null &gt;&amp;2
+	then
+	    warn rlwrap not found, command completion won\'t work
+	elif [ $READLINE = yes ]
+	then
+	    COMMANDS="${TMPDIR:-/tmp}/stumpish.commands.$$"
+	    echo $(send_cmd "commands") |
+	    sed -E 's/[[:space:]]+/\
+/g' |
+	    sort &gt; "$COMMANDS"
+	    trap 'rm -f "$COMMANDS"' exit int term
+	    rlwrap -b '' -f "$COMMANDS" "$0" -r
+	    exit
+	fi
+
+	tput AF setaf 5
+	echo Welcome to the STUMPwm Interactive SHell.
+	tput me sgr0
+	echo 'Type \c'
+	tput AF setaf 2
+	echo 'commands\c'
+	tput me sgr0
+	echo \ for a list of commands.
+
+	while read -p '&gt; ' REPLY
+	do
+	    tput md bold
+	    tput AF setaf 2
+	    send_cmd "$REPLY"
+	    tput me sgr0
+	done
+    else
+	while read REPLY
+	do
+	    send_cmd "$REPLY"
+	done
+    fi
+fi
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org267196a" class="outline-3">
+<h3 id="org267196a"><span class="section-number-3">6.8.</span> pacsize</h3>
+<div class="outline-text-3" id="text-6-8">
+<div class="org-src-container">
+<pre class="src src-python">#!/usr/bin/env python
+import re
+import os
+
+class Package:
+    def __init__(self,name,size):
+	self.name = name
+	self.size = int(round(float(size)))
+    def __repr__(self):
+	return `self.size`+" "+self.name
+    def __cmp__(self,other):
+	return cmp(other.size,self.size) #desc
+
+paclist = []
+
+re_name = re.compile(r'Name\s*:\s*(\S+)')
+re_size = re.compile(r'Installed Size\s*:\s*([0-9.]+).*')
+
+p = os.popen("pacman -Qi","r")
+
+for line in p.readlines():
+    match_name = re_name.match(line)
+    match_size = re_size.match(line)
+    if match_name :
+	    package_name = match_name.groups(1)[0]
+    if match_size :
+	    package_size = match_size.groups(1)[0]
+	    paclist.append(Package(package_name,package_size))
+
+p.close()
+
+paclist.sort()
+for pac in paclist: print pac
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org850a055" class="outline-3">
+<h3 id="org850a055"><span class="section-number-3">6.9.</span> pastebin</h3>
+<div class="outline-text-3" id="text-6-9">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/bash
+
+arg1="$1"
+cat $arg1 | curl -F 'f:1=&lt;-' ix.io
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org72321fc" class="outline-3">
+<h3 id="org72321fc"><span class="section-number-3">6.10.</span> poll</h3>
+<div class="outline-text-3" id="text-6-10">
+<div class="org-src-container">
+<pre class="src src-sh">#!/usr/bin/env bash
+
+__ScriptVersion="0.2"
+
+sha=0
+previous_sha=0
+timeout=1
+lazy=false
+all=false
+sha_cmd=shasum
+execute_on_startup=false
+
+#===  FUNCTION  ================================================================
+#         NAME:  execute_command
+#  DESCRIPTION:  Execute the command giveng in the command line argument.
+#===============================================================================
+function execute_command() {
+	clear
+	echo -en "executing \`${cmd}.\`\n"
+	echo -en "----------------------------------------------------------------"
+	echo -en "\n\n"
+	eval "${cmd}"
+	echo -en "\n\n"
+	echo -en "----------------------------------------------------------------"
+	echo -en "\ndone. Waiting for new changes on $path"
+}
+
+#===  FUNCTION  ================================================================
+#         NAME:  update_sha
+#  DESCRIPTION:  Updates the global sha varialbe by calculating the hash of the
+#                path using the specified sha_cmd.
+#===============================================================================
+function update_sha() {
+	if [[ $all == true ]]; then
+		sha=$(find "$path" -type f \
+			| sort -z | xargs $sha_cmd 2&gt; /dev/null | $sha_cmd)
+	else
+		sha=$(find "$path" -type f -not -path '*/\.*' \
+			| sort -z | xargs $sha_cmd 2&gt; /dev/null | $sha_cmd)
+	fi
+}
+
+#===  FUNCTION  ================================================================
+#         NAME:  usage
+#  DESCRIPTION:  Display usage information.
+#===============================================================================
+function usage () {
+				cat &lt;&lt;- EOT
+	 ___   ____
+	/   / /   / /    /
+       /___/ /   / /    /
+      /     /   / /    /
+     /     /___/ /___ /___
+
+  Polls a file or directory content and executes a given command if a change
+  has occurred. Uses a hash of the content for comparison.
+
+  Usage :  $0 [options] /path/to/observe command_to_execute_on_change
+
+  Options:
+  -a|all        Include hidden files in obervation.
+	-e|startup    Execute command on startup
+  -h|help       Display this message.
+  -l|lazy       Don't react to changes that happen during execution of the
+		command. Usefull if	the command changes the oberved to path.
+  -s|sha        Set the command used to calculate hash. The default is shasum.
+  -t|timeout    Set the time to sleep between looking for changes.
+  -v|version    Display script version.
+
+  Example : $0 -l -s shasum5.18 -t 0.5 /tmp/ 'echo change detected at \`date\`'
+
+				EOT
+}
+
+#-------------------------------------------------------------------------------
+#  Handle command line arguments
+#-------------------------------------------------------------------------------
+while getopts "aet:ls:hv" opt
+do
+  case $opt in
+		a|all      )  all=true                                        ;;
+		e|startup  )  execute_on_startup=true                         ;;
+		h|help     )  usage; exit 0                                   ;;
+		l|lazy     )  lazy=true                                       ;;
+		s|sha      )  sha_cmd=$OPTARG;                                ;;
+		t|timeout  )  timeout=$OPTARG;                                ;;
+		v|version  )  echo "$0 -- Version $__ScriptVersion"; exit 0   ;;
+
+		\? )  echo -e "\n  Option does not exist : $OPTARG\n"
+				  usage; exit 1                                       ;;
+
+  esac    # --- end of case ---
+done
+shift $((OPTIND-1))
+
+#-------------------------------------------------------------------------------
+#  Main script
+#-------------------------------------------------------------------------------
+if [ $# -eq 0 ];
+then
+	usage
+    exit 0
+fi
+path=$1
+shift
+cmd=$*
+update_sha
+previous_sha=$sha
+echo -en "Observing $path and will execute \`$cmd\`"
+if [[ $execute_on_startup == true ]]; then
+	execute_command
+fi
+while true; do
+	if [[ "$sha" != "$previous_sha" ]]; then
+		execute_command
+		previous_sha=$sha
+		if [[ $lazy == true ]]; then
+			update_sha
+			previous_sha=$sha
+			continue
+		fi
+	fi
+	update_sha
+	sleep "$timeout"
+done
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org04c2e7f" class="outline-3">
+<h3 id="org04c2e7f"><span class="section-number-3">6.11.</span> set-theme</h3>
+<div class="outline-text-3" id="text-6-11">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+# Set theme for desktop using gsettings.
+# This file is autostarted from desktop file "$HOME/.config/autostart/set-theme.desktop".
+# I made this so that when using a Tiling WM etc.. the theme adjustments will be reset to ones for GNOME when launching GNOME.
+# This is why we also check $XDG_CURRENT_DESKTOP so if we use another DE, we don't change it's customized theme to something else.
+
+# Check if the current desktop is GNOME, if so, set correct theme.
+if [ "$XDG_CURRENT_DESKTOP" == "GNOME" ]; then
+    GNOME_SCHEMA="org.gnome.desktop.interface"
+    gsettings set $GNOME_SCHEMA gtk-theme "Adwaita"
+    gsettings set $GNOME_SCHEMA icon-theme "Adwaita"
+    gsettings set $GNOME_SCHEMA font-name "Cantarell 12"
+    gsettings set $GNOME_SCHEMA cursor-theme "Adwaita"
+fi
+
+# Check if the current desktop is Hyprland, if so, set correct theme.
+if [ "$XDG_CURRENT_DESKTOP" == "Hyprland" ]; then
+    GNOME_SCHEMA="org.gnome.desktop.interface"
+    gsettings set $GNOME_SCHEMA gtk-theme "Greybird-dark"
+    gsettings set $GNOME_SCHEMA icon-theme "Adwaita"
+    gsettings set $GNOME_SCHEMA font-name "Fira Sans 12"
+    gsettings set $GNOME_SCHEMA cursor-theme "elementary"
+fi
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7a370e7" class="outline-3">
+<h3 id="org7a370e7"><span class="section-number-3">6.12.</span> start-aw.sh</h3>
+<div class="outline-text-3" id="text-6-12">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/bash
+# Start activitywatcher
+
+cd ~/.local/opt/activitywatch
+
+pkill aw-
+
+yszKillAwServer=$(pgrep aw -a | grep "server" | awk '{print $1}')
+yszKillWindowWatcher=$(pgrep aw -a | grep "window" | awk '{print $1}')
+yszKillAfkWatcher=$(pgrep aw -a | grep "afk" | awk '{print $1}')
+
+aw-server &amp;
+aw-watcher-utilization &amp;
+
+if [[ "$XDG_CURRENT_DESKTOP" == "GNOME" ]]
+then
+    ${yszKillWindowWatcher}
+    ${yszKillAfkWatcher}
+    aw-watcher-gnome &amp;
+    if [[ "$XDG_SESSION_TYPE" != "wayland" ]]
+    then
+	[[ $(pgrep aw-server) ]] &amp;&amp; aw-watcher-afk &amp;
+	[[ $(pgrep aw-server) ]] &amp;&amp; aw-watcher-window &amp;
+    fi
+fi
+
+if [[ "$XDG_SESSION_TYPE" == "wayland" &amp;&amp; "$XDG_CURRENT_DESKTOP" != "GNOME" ]]
+then
+    ${yszKillWindowWatcher}
+    ${yszKillAfkWatcher}
+    aw-watcher-wayland &amp;
+else
+    [[ $(pgrep aw-server) ]] &amp;&amp; aw-watcher-afk &amp;
+    [[ $(pgrep aw-server) ]] &amp;&amp; aw-watcher-window &amp;
+fi
+
+notify-send "ActivityWatch started"
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc019f07" class="outline-3">
+<h3 id="orgc019f07"><span class="section-number-3">6.13.</span> start-keychain</h3>
+<div class="outline-text-3" id="text-6-13">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+
+eval $(keychain --eval --noask --quiet id_ed25519)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5b43d00" class="outline-3">
+<h3 id="org5b43d00"><span class="section-number-3">6.14.</span> rain-sounds.sh</h3>
+<div class="outline-text-3" id="text-6-14">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/bash
+
+chromium --new-window https://www.youtube.com/watch?v=SEkPsIXQEIU &amp;
+
+
+qpwgraph -a $HOME/Documents/qpwgraph-patchbays/dual-output-rain-sounds.qpwgraph &amp;
+pavucontrol &amp;
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5510518" class="outline-3">
+<h3 id="org5510518"><span class="section-number-3">6.15.</span> import-settings</h3>
+<div class="outline-text-3" id="text-6-15">
+<p>
+Set cursor theme e.g for use with Hyprland or any other window manager that runs on Wayland.
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+
+# usage: import-gsettings
+config="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
+if [ ! -f "$config" ]; then exit 1; fi
+
+gnome_schema="org.gnome.desktop.interface"
+gtk_theme="$(grep 'gtk-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+icon_theme="$(grep 'gtk-icon-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+cursor_theme="$(grep 'gtk-cursor-theme-name' "$config" | sed 's/.*\s*=\s*//')"
+font_name="$(grep 'gtk-font-name' "$config" | sed 's/.*\s*=\s*//')"
+gsettings set "$gnome_schema" gtk-theme "$gtk_theme"
+gsettings set "$gnome_schema" icon-theme "$icon_theme"
+gsettings set "$gnome_schema" cursor-theme "$cursor_theme"
+gsettings set "$gnome_schema" font-name "$font_name"
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org6b3ac73" class="outline-2">
+<h2 id="org6b3ac73"><span class="section-number-2">7.</span> Music control scripts</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+<div id="outline-container-orgc295936" class="outline-3">
+<h3 id="orgc295936"><span class="section-number-3">7.1.</span> mpc-control.sh</h3>
+<div class="outline-text-3" id="text-7-1">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+#
+
+PAUSECMD=$(mpc | egrep '(paused|playing)' | awk '{print $1}' | sed 's/\[//g;s/\]//g')
+ARG="$1"
+
+case "$ARG" in
+    "PAUSE" )
+	echo "${PAUSECMD}" &gt; /tmp/mpcpausedstate
+	if [[ "$(cat /tmp/mpcpausedstate)" == "paused" ]]; then
+	    mpc play
+	fi
+	if [[ "$(cat /tmp/mpcpausedstate)" == "playing" ]]; then
+	    mpc pause
+	fi
+	;;
+    "STOP" )
+	mpc stop
+	;;
+    "NEXT" )
+	mpc next
+	;;
+    "PREVIOUS" )
+	mpc prev
+	;;
+    "STATUS" )
+	mpc | head -n2 | tr '\n' ' '
+	;;
+esac
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org387a3e3" class="outline-2">
+<h2 id="org387a3e3"><span class="section-number-2">8.</span> Status bar scripts</h2>
+<div class="outline-text-2" id="text-8">
+</div>
+<div id="outline-container-org427b8bc" class="outline-3">
+<h3 id="org427b8bc"><span class="section-number-3">8.1.</span> launch-bar.sh</h3>
+<div class="outline-text-3" id="text-8-1">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+
+oxbar -F $HOME/.config/oxbar/oxbar.conf mytheme
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org00e5558" class="outline-3">
+<h3 id="org00e5558"><span class="section-number-3">8.2.</span> launchdzenbar.sh</h3>
+<div class="outline-text-3" id="text-8-2">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+
+dzen2script.sh
+sleep 1
+dzen2script-msgs.sh
+sleep 1
+dzen2script-volbar.sh
+# sleep 1
+# dzen2script-weather.sh &amp;
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdc4518a" class="outline-2">
+<h2 id="orgdc4518a"><span class="section-number-2">9.</span> Volume control scripts</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+Scripts to control volume.
+</p>
+</div>
+<div id="outline-container-orgd7c532e" class="outline-3">
+<h3 id="orgd7c532e"><span class="section-number-3">9.1.</span> dbar-volume.sh</h3>
+<div class="outline-text-3" id="text-9-1">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+
+VOLUME="$(sndiovolv2.sh STATUS | xargs printf %.0f)"
+
+echo ${VOLUME} | dbar -max 100 -min 0 -s '#' -l 'Vol'
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org48f5add" class="outline-3">
+<h3 id="org48f5add"><span class="section-number-3">9.2.</span> sndiovol.sh</h3>
+<div class="outline-text-3" id="text-9-2">
+<div class="org-src-container">
+<pre class="src src-sh">#!/bin/sh
+
+VOLCMD=$(sndioctl | grep output.level | sed 's/output\.level\=//g')
+VOL=$(echo "${VOLCMD}*100" | bc)
+ADJ="$1"
+VOLADJ="$2"
+
+if [[ -z $VOLADJ ]]; then
+    UP=3
+    DOWN=3
+else
+    UP=$VOLADJ
+    DOWN=$VOLADJ
+fi
+
+VOLUP=$(echo "(${VOL}+$UP)/100" | bc -l)
+VOLDOWN=$(echo "(${VOL}-$DOWN)/100" | bc -l)
+
+if [[ "$ADJ" == "UP" ]]; then
+    sndioctl output.level=+${VOLUP}
+fi
+
+if [[ "$ADJ" == "DOWN" ]]; then
+    sndioctl output.level=-${VOLDOWN}
+fi
+
+if [[ "$ADJ" == "STATUS" ]]; then
+    echo "${VOL}"
+fi
+
+MUTESTATUS=$(echo "(${VOL}/100)&gt;0" | bc -l)
+
+if [[ "$ADJ" == "TOGMUTE" ]]; then
+    if [[ ${MUTESTATUS} -eq 1 ]]; then
+	CURVOL=$(echo $(echo "${VOL}/100" | bc -l) &gt; /tmp/curvol)
+	sndioctl output.level=0
+    fi
+    if [[ ${MUTESTATUS} -eq 0 ]]; then
+	CURVOL=$(cat /tmp/curvol)
+	sndioctl output.level=${CURVOL}
+    fi
+fi
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6e7b81c" class="outline-3">
+<h3 id="org6e7b81c"><span class="section-number-3">9.3.</span> sndiovolv2.sh</h3>
+<div class="outline-text-3" id="text-9-3">
+<div class="org-src-container">
+<pre class="src src-sh">#!/usr/local/bin/bash
+
+VOL_CMD=$(sndioctl output.level | cut -d'=' -f2)
+ARG[1]=$1
+if [ ! -z $2 ]; then
+    ARG[2]=$(bc -l &lt;&lt;&lt; "$2/100" | xargs printf %.2f)
+fi
+
+case ${ARG[1]} in
+    "STATUS")
+	bc -l &lt;&lt;&lt; "${VOL_CMD}*100";;
+    "UP")
+	sndioctl output.level=+${ARG[2]};;
+    "DOWN")
+	sndioctl output.level=-${ARG[2]};;
+    "TOGMUTE")
+	sndioctl output.mute=!
+	notify-send "Volume Muted";;
+esac
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbba8126" class="outline-3">
+<h3 id="orgbba8126"><span class="section-number-3">9.4.</span> sndiovolv2.sh.template</h3>
+<div class="outline-text-3" id="text-9-4">
+<div class="org-src-container">
+<pre class="src src-sh">#!/usr/local/bin/bash
+
+VOL_CMD=$(sndioctl output.level | cut -d'=' -f2)
+ARG[1]=$1
+if [ ! -z $2 ]; then
+    ARG[2]=$(bc -l &lt;&lt;&lt; "$2/100" | xargs printf %.2f)
+fi
+
+case ${ARG[1]} in
+    "UP")
+	sndioctl output.level=+${ARG[2]};;
+    "DOWN")
+	sndioctl output.level=-${ARG[2]};;
+    "TOGMUTE")
+	if [ -f "/tmp/prev_vol" ]; then
+	    PREV_VOL=$(cat /tmp/prev_vol)
+	else
+	    PREV_VOL=$(echo ${VOL_CMD} &gt; /tmp/prev_vol)
+	fi
+	IS_MUTED=$(bc -l &lt;&lt;&lt; "${PREV_VOL}&gt;0")
+	if [ ! ${IS_MUTED} ]; then
+	    sndioctl output.level=${PREV_VOL}
+	else
+	    sndioctl output.level=0.000
+	fi
+esac
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbb1c293" class="outline-2">
+<h2 id="orgbb1c293"><span class="section-number-2">10.</span> Wayland scripts</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+Scripts for Wayland.
+</p>
+</div>
+<div id="outline-container-orge8602bf" class="outline-3">
+<h3 id="orge8602bf"><span class="section-number-3">10.1.</span> wlprop</h3>
+<div class="outline-text-3" id="text-10-1">
+<div class="org-src-container">
+<pre class="src src-sh">#!/usr/bin/env sh
+
+# wlprop
+#
+# Licensed under the MIT license
+# Copyright © 2022 bjosephmitchell@gmail.com
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the “Software”), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+# Dependencies:
+# - swaymsg
+# - jq
+# - slurp
+# - awk
+
+# Get the sway tree and store the output
+SWAY_TREE=$(swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?)')
+
+# Invoke slurp to let the user select a window
+SELECTION=$(echo $SWAY_TREE | jq -r '.rect | "\(.x),\(.y) \(.width)x\(.height)"' | slurp)
+
+# Extract the X, Y, Width, and Height from the selection
+X=$(echo $SELECTION | awk -F'[, x]' '{print $1}')
+Y=$(echo $SELECTION | awk -F'[, x]' '{print $2}')
+W=$(echo $SELECTION | awk -F'[, x]' '{print $3}')
+H=$(echo $SELECTION | awk -F'[, x]' '{print $4}')
+
+# Find the window matching the selection
+echo $SWAY_TREE | jq -r --argjson x $X --argjson y $Y --argjson w $W --argjson h $H \
+  '. | select(.rect.x == $x and .rect.y == $y and .rect.width == $w and .rect.height == $h)'
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org725a35a" class="outline-2">
+<h2 id="org725a35a"><span class="section-number-2">11.</span> Startup scripts</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+Scripts for starting stuff up.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Yusef Aslam</p>
+<p class="date">Created: 2023-10-14 Sat 18:07</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

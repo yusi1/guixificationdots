@@ -1,0 +1,3 @@
+#!/bin/sh
+
+eval $(keychain --eval --noask --quiet id_ed25519)

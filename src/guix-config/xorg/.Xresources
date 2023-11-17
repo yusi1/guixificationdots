@@ -1,0 +1,29 @@
+Xft.dpi: 120
+Xcursor.size: 28
+
+xterm*background: black
+xterm*foreground: lightgrey
+/* xterm*font: -misc-fixed-*-*-*-*-20-*-*-*-*-*-*-* */
+/* xterm*font: -xos4-terminus-bold-*-*-*-28-*-*-*-*-*-*-* */
+xterm*font: -misc-fixed-bold-*-*-*-18-*-*-*-*-*-*-*
+/* xterm*faceName: spleen:pixelsize=24:antialias=false */
+
+URxvt*buffered: true
+URxvt*cursorBlink: true
+URxvt*underlineColor: yellow
+URxvt*font: -misc-fixed-bold-*-*-*-18-*-*-*-*-*-*-*
+URxvt*depth: 32
+URxvt*borderless: 1
+URxvt*scrollBar: false
+URxvt*loginShell: true
+Urxvt*secondaryScroll:  true    # Enable Shift-PageUp/Down in screen
+URxvt*saveLines: 5000
+URxvt*termName: rxvt-unicode
+URxvt.perl-ext-common: default,matcher
+URxvt.urlLauncher: firefox
+URxvt.matcher.button: 1
+
+!emacs
+! Xft.rgba: none
+emacs.font: DejaVu Sans Mono-14
+

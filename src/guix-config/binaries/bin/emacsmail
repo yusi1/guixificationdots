@@ -1,0 +1,2 @@
+emacsclient -create-frame -n --alternate-editor='emacs' --no-wait --eval \
+"(progn (x-focus-frame nil) (mu4e-compose-from-mailto \"$1\" t))"

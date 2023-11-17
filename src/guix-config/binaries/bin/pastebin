@@ -1,0 +1,4 @@
+#!/bin/bash
+
+arg1="$1"
+cat $arg1 | curl -F 'f:1=<-' ix.io

@@ -1,0 +1,26 @@
+#!/usr/local/bin/bash
+
+VOL_CMD=$(sndioctl output.level | cut -d'=' -f2)
+ARG[1]=$1
+if [ ! -z $2 ]; then
+    ARG[2]=$(bc -l <<< "$2/100" | xargs printf %.2f)
+fi
+
+case ${ARG[1]} in
+    "UP")
+        sndioctl output.level=+${ARG[2]};;
+    "DOWN")
+        sndioctl output.level=-${ARG[2]};;
+    "TOGMUTE")
+        if [ -f "/tmp/prev_vol" ]; then
+            PREV_VOL=$(cat /tmp/prev_vol)
+        else
+            PREV_VOL=$(echo ${VOL_CMD} > /tmp/prev_vol)
+        fi
+        IS_MUTED=$(bc -l <<< "${PREV_VOL}>0")
+        if [ ! ${IS_MUTED} ]; then
+            sndioctl output.level=${PREV_VOL}
+        else
+            sndioctl output.level=0.000
+        fi
+esac

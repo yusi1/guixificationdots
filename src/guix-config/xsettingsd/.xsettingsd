@@ -1,0 +1,11 @@
+# Configure our fonts.
+Xft/Antialias 1
+Xft/HintStyle "hintslight"
+Xft/Hinting 1
+Xft/RGBA "none"
+Xft/lcdfilter "none"
+
+# GTK settings
+Net/ThemeName "Adwaita-dark"
+Net/FontName "Fira Sans 12"
+Net/CursorThemeName "Adwaita"

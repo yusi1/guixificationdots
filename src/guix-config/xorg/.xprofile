@@ -1,0 +1,9 @@
+export GDK_DPI_SCALE=1.2
+export QT_QPA_PLATFORMTHEME=gtk2
+export PATH="$HOME/.local/bin:$HOME/.config/emacs/bin:$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
+export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:/home/yaslam/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
+
+#syncthing
+
+xrdb -merge ~/.Xresources
+

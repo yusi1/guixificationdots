@@ -1,0 +1,14 @@
+export GDK_DPI_SCALE=1.2
+export PATH="$HOME/.local/bin:$HOME/.config/emacs/bin:$PATH"
+export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:/home/yaslam/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
+xrandr --auto
+
+xsettingsd -c ~/.xsettingsd-twm &
+
+xrdb -merge ~/.Xresources
+setxkbmap gb
+dbus-run-session -- wireplumber &
+dbus-run-session -- pipewire &
+dbus-run-session -- pipewire-pulse &
+
+exec awesome

@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+
+__ScriptVersion="0.2"
+
+sha=0
+previous_sha=0
+timeout=1
+lazy=false
+all=false
+sha_cmd=shasum
+execute_on_startup=false
+
+#===  FUNCTION  ================================================================
+#         NAME:  execute_command
+#  DESCRIPTION:  Execute the command giveng in the command line argument.
+#===============================================================================
+function execute_command() {
+	clear
+	echo -en "executing \`${cmd}.\`\n"
+	echo -en "----------------------------------------------------------------"
+	echo -en "\n\n"
+	eval "${cmd}"
+	echo -en "\n\n"
+	echo -en "----------------------------------------------------------------"
+	echo -en "\ndone. Waiting for new changes on $path"
+}
+
+#===  FUNCTION  ================================================================
+#         NAME:  update_sha
+#  DESCRIPTION:  Updates the global sha varialbe by calculating the hash of the
+#                path using the specified sha_cmd.
+#===============================================================================
+function update_sha() {
+	if [[ $all == true ]]; then
+		sha=$(find "$path" -type f \
+			| sort -z | xargs $sha_cmd 2> /dev/null | $sha_cmd)
+	else
+		sha=$(find "$path" -type f -not -path '*/\.*' \
+			| sort -z | xargs $sha_cmd 2> /dev/null | $sha_cmd)
+	fi
+}
+
+#===  FUNCTION  ================================================================
+#         NAME:  usage
+#  DESCRIPTION:  Display usage information.
+#===============================================================================
+function usage () {
+				cat <<- EOT
+         ___   ____
+        /   / /   / /    /
+       /___/ /   / /    /
+      /     /   / /    /
+     /     /___/ /___ /___
+
+  Polls a file or directory content and executes a given command if a change
+  has occurred. Uses a hash of the content for comparison.
+
+  Usage :  $0 [options] /path/to/observe command_to_execute_on_change
+
+  Options:
+  -a|all        Include hidden files in obervation.
+	-e|startup    Execute command on startup
+  -h|help       Display this message.
+  -l|lazy       Don't react to changes that happen during execution of the
+                command. Usefull if	the command changes the oberved to path.
+  -s|sha        Set the command used to calculate hash. The default is shasum.
+  -t|timeout    Set the time to sleep between looking for changes.
+  -v|version    Display script version.
+
+  Example : $0 -l -s shasum5.18 -t 0.5 /tmp/ 'echo change detected at \`date\`'
+
+				EOT
+}
+
+#-------------------------------------------------------------------------------
+#  Handle command line arguments
+#-------------------------------------------------------------------------------
+while getopts "aet:ls:hv" opt
+do
+  case $opt in
+		a|all      )  all=true                                        ;;
+		e|startup  )  execute_on_startup=true                         ;;
+		h|help     )  usage; exit 0                                   ;;
+		l|lazy     )  lazy=true                                       ;;
+		s|sha      )  sha_cmd=$OPTARG;                                ;;
+		t|timeout  )  timeout=$OPTARG;                                ;;
+		v|version  )  echo "$0 -- Version $__ScriptVersion"; exit 0   ;;
+
+		\? )  echo -e "\n  Option does not exist : $OPTARG\n"
+				  usage; exit 1                                       ;;
+
+  esac    # --- end of case ---
+done
+shift $((OPTIND-1))
+
+#-------------------------------------------------------------------------------
+#  Main script
+#-------------------------------------------------------------------------------
+if [ $# -eq 0 ];
+then
+	usage
+    exit 0
+fi
+path=$1
+shift
+cmd=$*
+update_sha
+previous_sha=$sha
+echo -en "Observing $path and will execute \`$cmd\`"
+if [[ $execute_on_startup == true ]]; then
+	execute_command
+fi
+while true; do
+	if [[ "$sha" != "$previous_sha" ]]; then
+		execute_command
+		previous_sha=$sha
+		if [[ $lazy == true ]]; then
+			update_sha
+			previous_sha=$sha
+			continue
+		fi
+	fi
+	update_sha
+	sleep "$timeout"
+done

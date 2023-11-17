@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+if [[ $1 == "-h" ]] || [[ $1 == "-help" ]]; then
+    echo -e "HACKTHEBOX VPN STARTER STOPPER"
+    echo -e "-h or -help	PRINT THIS HELP"
+    echo -e "-start		START THE VPN"
+    echo -e "-stop		STOP THE VPN"
+fi
+
+if [[ $1 == "-start" ]] || [[ $1 == "start" ]]; then
+    sudo systemctl start openvpn-client@hackthebox.service
+    systemctl status openvpn-client@hackthebox.service
+fi
+
+if [[ $1 == "-stop" ]] || [[ $1 == "stop" ]]; then
+   sudo systemctl stop openvpn-client@hackthebox.service
+   systemctl status openvpn-client@hackthebox.service
+fi

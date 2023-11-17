@@ -1,0 +1,114 @@
+;; This "home-environment" file can be passed to 'guix home reconfigure'
+;; to reproduce the content of your profile.  This is "symbolic": it only
+;; specifies package names.  To reproduce the exact same profile, you also
+;; need to capture the channels being used, as returned by "guix describe".
+;; See the "Replicating Guix" section in the manual.
+
+(use-modules (gnu home)
+             (gnu packages)
+	     (gnu home services)
+             (gnu services)
+             (guix gexp)
+             (gnu home services shells)
+	     (gnu home services gnupg)
+	     (gnu packages gnupg))
+
+(home-environment
+ ;; Below is the list of packages that will show up in your
+ ;; Home profile, under ~/.guix-home/profile.
+ (packages (specifications->packages
+	    (list
+	     "ytfzf"
+             "nextcloud-client"
+	     "gparted"
+	     "vlc"
+	     "blender"
+	     "flatpak"
+             "dconf-editor"
+	     "virt-manager"
+	     "vim-full"
+	     "lxappearance"
+	     "ublock-origin-icecat"
+             "icecat"
+             "htop"
+             "hexchat"
+             "fzf"
+             "font-fira-sans"
+             "xsettingsd"
+             "libvterm"
+             "libtool"
+             "cmake"
+             "emacs-parinfer-mode"
+             "emacs-geiser-guile"
+             "emacs-geiser"
+             "guile"
+             "emacs"
+             "font-google-noto-emoji"
+             "unzip"
+             "kakoune"
+             "emacs-guix"
+             "stow"
+             "git"
+	     "secrets"
+             "keepassxc"
+             "ublock-origin-chromium"
+	     "i3status"
+	     "i3lock"
+	     "network-manager-applet"
+	     "picom"
+	     "dex"
+	     "nitrogen"
+	     "volumeicon"
+	     "zenity"
+	     "xss-lock"
+	     "font-terminus"
+	     "greybird-gtk-theme"
+	     "pamixer"
+	     "dunst"
+	     "dmenu"
+	     "playerctl"
+	     "papirus-icon-theme"
+	     "rofi")))
+
+ ;; Below is the list of Home services.  To search for available
+ ;; services, run 'guix home search KEYWORD' in a terminal.
+ (services
+  (list (service home-bash-service-type
+                 (home-bash-configuration
+                  (aliases '(("grep" . "grep --color=auto")
+                             ("ip" . "ip -color=auto")
+                             ("la" . "ls -la --color=auto")
+                             ("ll" . "ls -l")
+                             ("ls" . "ls -p --color=auto")))
+                  (bashrc (list (local-file
+                                 "/home/yaslam/src/guix-config/.bashrc"
+                                 "bashrc")))
+                  (bash-profile (list (local-file
+                                       "/home/yaslam/src/guix-config/.bash_profile"
+                                       "bash_profile")))))
+
+	(service home-files-service-type
+		 `((".gitconfig" ,(local-file "gitconfig"))
+		   (".config/i3/config" ,(local-file "i3/.config/i3/config"))
+		   (".config/picom/picom.conf" ,(local-file "picom/.config/picom/picom.conf"))
+		   (".config/i3status/config" ,(local-file "i3status/.config/i3status/config"))
+		   (".local/share/xsessions/i3.desktop" ,(local-file "i3.desktop"))
+		   (".config/nvim/init.vim" ,(local-file "nvim/.config/nvim/init.vim"))
+		   (".vimrc" ,(local-file "vim/.vimrc"))
+		   (".gvimrc" ,(local-file "vim/.gvimrc"))
+		   (".emacs" ,(local-file "emacs/.emacs"))
+		   (".config/rofi/config.rasi" ,(local-file "rofi/.config/rofi/config.rasi"))))
+
+	(simple-service 'my-env-vars-service
+			home-environment-variables-service-type
+			`(("GDK_DPI_SCALE" . "1.0")
+			  ("BEANS" . "BEANSNMACHINES")
+			  ("XDG_DATA_DIRS" . "$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/yaslam/.local/share/flatpak/exports/share")
+			  ("PATH" . "$HOME/.local/bin:$HOME/bin:$PATH")
+			  ("GUIX_PACKAGE_PATH" . "$HOME/guix-packages")))
+
+	(service home-gpg-agent-service-type
+		 (home-gpg-agent-configuration
+		  (pinentry-program
+                   (file-append pinentry-emacs "/bin/pinentry-emacs"))
+		  (ssh-support? #t))))))
